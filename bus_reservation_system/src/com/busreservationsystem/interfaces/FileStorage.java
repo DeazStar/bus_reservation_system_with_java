@@ -4,5 +4,7 @@ import java.util.ArrayList;
 
 public interface FileStorage {
 	public abstract void store();
-	public abstract ArrayList<String> load(String name);
+	default ArrayList<String> load(String name){
+		return null;
+	}
 }

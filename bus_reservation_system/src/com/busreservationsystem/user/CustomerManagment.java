@@ -1,6 +1,8 @@
 package com.busreservationsystem.user;
 
 import com.busreservationsystem.interfaces.FileStorage;
+import java.sql.SQLException;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -17,12 +19,17 @@ public class CustomerManagment implements FileStorage{
 		this.password = password;
 	}
 
-	public void login(String username, String password){
+	public boolean login(String username, String password){
 		ArrayList<String> userInfo = this.load(username);
+		if (userInfo == null) {
+			return false;
+		}
 		if (userInfo.get(0).equals(username) && userInfo.get(1).equals(password)) {
 			System.out.println("Login successful");
+			return false;
 		} else {
 			System.out.println("access denied");
+			return true;
 		}
 	}
 
@@ -123,6 +130,7 @@ public class CustomerManagment implements FileStorage{
 		}
 	}
 	
+	@Override
 	public ArrayList<String> load(String username){
 		Connection connection = null;
 		PreparedStatement statement = null;
@@ -149,11 +157,26 @@ public class CustomerManagment implements FileStorage{
 				retrivedPassword = resultset.getString("password");	
 			}
 			
+			if (retrivedUsername == null) {
+				return null;
+			}
 			info.add(retrivedUsername);
 			info.add(retrivedPassword);
 			
 		} catch(SQLException exec) {
 			exec.printStackTrace();
+		} finally {
+			try {
+				if (statement != null) {
+					statement.close();
+				}
+				
+				if (connection != null) {
+					statement.close();
+				}
+			} catch(SQLException ex) {
+				ex.printStackTrace();
+			}
 		}
 		
 		return info;

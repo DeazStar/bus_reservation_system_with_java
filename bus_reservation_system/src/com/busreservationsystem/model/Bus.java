@@ -13,7 +13,7 @@ public class Bus {
 	private double busTicketPrice;
 	private int numberOfSeats;
 	private Customer[] reservedSeats;
-
+	private int busId; // newely added attritbure
 	public Bus(BusDriver driver, Route route, LocalTime departureTime,
 				LocalTime arrivalTime, double busTicketPrice, int numberOfSeats){
 		//this.busId = busId;
@@ -25,6 +25,9 @@ public class Bus {
 		this.numberOfSeats = numberOfSeats;
 		this.reservedSeats = new Customer[numberOfSeats];
 	}
+	
+	// add a null constructor
+	public Bus() {}
 
 	// setter method for bus Id
 	/*public void setBusId(String busId){
@@ -35,6 +38,15 @@ public class Bus {
 	public String getBusId(){
 		return this.busId;
 	}*/
+	
+	public int getBusId() {
+		return this.busId;
+	}
+	
+	public void setBusId(int busId) {
+		this.busId = busId;
+				
+	}
 
 	//setter method for driver
 	public void setDriver(BusDriver driver){

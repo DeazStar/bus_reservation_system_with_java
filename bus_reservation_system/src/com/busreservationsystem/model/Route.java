@@ -5,16 +5,18 @@ public class Route {
 	private String source;
 	private String destination;
 
-	public Route(int routeId, String source, String destination){
-		this.routeId = routeId;
+	public Route(String source, String destination){
+		/*this.routeId = routeId;*/
 		this.source = source;
 		this.destination = destination;
 	}
+	
+	public Route() {}
 
 	//getter and setter method 
 
 	//setter method for routeId
-	public void setRouteId(int routeId){
+	/*public void setRouteId(int routeId){
 		this.routeId = routeId;
 	}
 
@@ -22,7 +24,14 @@ public class Route {
 	public int getRouteId(){
 		return this.routeId;
 	}
-
+*/
+	public void setRouteId(int routeId) {
+		this.routeId = routeId;
+	}
+	
+	public int getRouteId() {
+		return this.routeId;
+	}
 	//setter method for source
 	public void setSource(String source){
 		this.source = source;
