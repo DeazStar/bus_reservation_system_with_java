@@ -24,6 +24,10 @@ public class Address {
 	public void setAddressId(int addressId) {
 		this.addressId = addressId;
 	}
+	
+	public int getAddressId() {
+		return this.addressId;
+	}
 	public void setStreetAddress(String streetAddress) {
 		this.streetAddress = streetAddress;
 	}

@@ -88,7 +88,7 @@ public class Main {
 			System.out.println(bus.getBusId());
 			
 		}*/
-		
+		/*
 		LocalDate birthdate = LocalDate.of(1995, 8, 12);
 		
         Administrator admin = new  Administrator();
@@ -105,6 +105,11 @@ public class Main {
         System.out.println(bus.getBusId());
         admin.saveDriver();
         System.out.println(driver.getDriverId());
+        */
+		
+		// test edit bus
+		
+		
         
 	}
 }
