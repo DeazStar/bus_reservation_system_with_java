@@ -2,6 +2,7 @@ CREATE TABLE bus(
     bus_id INT AUTO_INCREMENT PRIMARY KEY,
     driver_id INT,
     route_id INT,
+    date Date,
     departure_time TIME,
     arrival_time TIME,
     bus_ticket_price DECIMAL(10,2),
