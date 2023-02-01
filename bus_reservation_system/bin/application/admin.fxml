@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="415.0" prefWidth="721.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.adminController">
+   <children>
+      <TableView layoutX="15.0" layoutY="138.0" prefHeight="268.0" prefWidth="694.0" style="-fx-background-color: #0001;">
+        <columns>
+          <TableColumn fx:id="busnoid" prefWidth="51.11111831665039" text="bus no" />
+          <TableColumn fx:id="driverid" prefWidth="94.44441986083984" text="driver name" />
+            <TableColumn fx:id="priceid" prefWidth="63.111083984375" text="price" />
+            <TableColumn fx:id="deptimeid" prefWidth="102.66667175292969" text="departure time" />
+            <TableColumn fx:id="arrtimeid" prefWidth="94.22222900390625" text="arrival time" />
+            <TableColumn fx:id="sourceid" prefWidth="70.22213745117188" text="source" />
+            <TableColumn fx:id="destinationid" prefWidth="95.111083984375" text="destination" />
+            <TableColumn fx:id="totalseatsid" minWidth="0.0" prefWidth="118.22222900390625" text="total seats" />
+        </columns>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </TableView>
+      <TextField fx:id="driver_TextField" layoutX="97.0" layoutY="61.0" prefHeight="25.0" prefWidth="112.0" text="driver" />
+      <TextField fx:id="source_TextField" layoutX="415.0" layoutY="59.0" text="source" />
+      <TextField fx:id="price_TextField" layoutX="235.0" layoutY="59.0" text="price" />
+      <TextField fx:id="destination_TextField" layoutX="538.0" layoutY="97.0" text="destination" />
+      <Button fx:id="addbusid" layoutX="16.0" layoutY="71.0" mnemonicParsing="false" onAction="#add" text="Add bus" />
+      <Button layoutX="151.0" layoutY="4.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="133.0" text="custumor" />
+      <Button layoutX="8.0" layoutY="4.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="133.0" text="Available buses" />
+      <TextField fx:id="totald_TextField" layoutX="585.0" layoutY="58.0" prefHeight="33.0" prefWidth="115.0" text="total seats" />
+      <DatePicker fx:id="dateId" layoutX="98.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" />
+      <TextField fx:id="arrivaltime_TextField" layoutX="235.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" />
+      <TextField fx:id="deptime_TextField" layoutX="381.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" />
+   </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+</AnchorPane>
