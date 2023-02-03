@@ -137,8 +137,8 @@ public class CustomerManagment implements FileStorage {
                     + "(street_address, city, region) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
             customerInsert = connection.prepareStatement("INSERT INTO customer (first_name,"
-                    + "last_name, date_of_birth, email, phone_number, address_id) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                    + "last_name, gender, date_of_birth, email, phone_number, address_id) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
             customerManagmentInsert = connection.prepareStatement("INSERT INTO "
                     + "customer_management (customer_id, customer_name, username, password) "
@@ -159,11 +159,12 @@ public class CustomerManagment implements FileStorage {
                 // insert the customer information
                 customerInsert.setString(1, customer.getFirstName());
                 customerInsert.setString(2, customer.getLastName());
+                customerInsert.setString(3, customer.getGender());
                 Date date = java.sql.Date.valueOf(customer.getDateOfBirth());
-                customerInsert.setDate(3, date);
-                customerInsert.setString(4, customer.getEmail());
-                customerInsert.setString(5, customer.getPhoneNumber());
-                customerInsert.setInt(6, addressId);
+                customerInsert.setDate(4, date);
+                customerInsert.setString(5, customer.getEmail());
+                customerInsert.setString(6, customer.getPhoneNumber());
+                customerInsert.setInt(7, addressId);
                 customerInsert.executeUpdate();
 
                 //get the generated customer_id

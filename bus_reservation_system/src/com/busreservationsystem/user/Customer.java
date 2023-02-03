@@ -16,9 +16,9 @@ public class Customer extends Person {
     private int seatNumber;
     //private Ticket ticket;
 
-    public Customer(String firstName, String lastName, LocalDate dateOfBirth,
+    public Customer(String firstName, String lastName, String gender, LocalDate dateOfBirth,
             String email, String phoneNumber, Address address) {
-        super(firstName, lastName, dateOfBirth, email, phoneNumber, address);
+        super(firstName, lastName, gender, dateOfBirth, email, phoneNumber, address);
         /*this.userName = userName;
 		this.password = password;*/
     }
@@ -63,6 +63,14 @@ public class Customer extends Person {
 
     public String getLastName() {
         return this.lastName;
+    }
+    
+    public void setGender(String gender) {
+    	this.gender = gender;
+    }
+    
+    public String getGender() {
+    	return this.gender;
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {

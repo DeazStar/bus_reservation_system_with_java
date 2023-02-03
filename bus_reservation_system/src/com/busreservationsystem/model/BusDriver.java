@@ -10,9 +10,9 @@ public class BusDriver extends Person {
     private int driverId;// new attribute
 
     /*private int driverId; // newly added*/
-    public BusDriver(String firstName, String lastName, LocalDate dateOfBirth,
+    public BusDriver(String firstName, String lastName, String gender, LocalDate dateOfBirth,
             String email, String phoneNumber, Address address, Bus assignedBus) {
-        super(firstName, lastName, dateOfBirth, email, phoneNumber, address);
+        super(firstName, lastName, gender, dateOfBirth, email, phoneNumber, address);
         this.assignedBus = assignedBus;
         /*this.driverId = driverId; // newly added*/
     }
@@ -44,6 +44,15 @@ public class BusDriver extends Person {
     // getter method for the lastName
     public String getLastName() {
         return this.lastName;
+    }
+    
+    
+    public void setGender(String gender) {
+    	this.gender = gender;
+    }
+    
+    public String getGender() {
+    	return this.gender;
     }
 
     public void setDateOfBirth(LocalDate dateOfBirth) {

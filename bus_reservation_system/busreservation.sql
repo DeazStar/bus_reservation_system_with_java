@@ -69,3 +69,5 @@ ALTER TABLE bus_driver ADD FOREIGN KEY (assigned_bus) REFERENCES bus(bus_id);
 ALTER TABLE customer ADD FOREIGN KEY (address_id) REFERENCES address(address_id);
 ALTER TABLE reservation ADD FOREIGN KEY (customer_id) REFERENCES customer(customer_id);
 ALTER TABLE reservation ADD FOREIGN KEY (bus_id) REFERENCES bus(bus_id);
+ALTER TABLE table_name
+ADD COLUMN gender CHAR(1) AFTER last_name;
