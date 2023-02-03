@@ -37,7 +37,7 @@ public class Administrator implements FileStorage {
             busEdit.setTime(2, Time.valueOf(newBus.getArrivalTime()));
             BigDecimal price = BigDecimal.valueOf(newBus.getBusTicketPrice()).setScale(2, RoundingMode.HALF_UP);
             busEdit.setBigDecimal(3, price);
-            busEdit.setInt(4, newBus.getnumberOfSeats());
+            busEdit.setInt(4, newBus.getNumberOfSeats());
             busEdit.setInt(5, bus.getBusId());
 
             busEdit.executeUpdate();
@@ -589,7 +589,7 @@ public class Administrator implements FileStorage {
             busInsert.setTime(5, arrivalTime);
             BigDecimal price = BigDecimal.valueOf(bus.getBusTicketPrice()).setScale(2, RoundingMode.HALF_UP);
             busInsert.setBigDecimal(6, price);
-            busInsert.setInt(7, bus.getnumberOfSeats());
+            busInsert.setInt(7, bus.getNumberOfSeats());
             busInsert.executeUpdate();
 
             ResultSet busKey = busInsert.getGeneratedKeys();

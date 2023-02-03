@@ -1,16 +1,12 @@
 package application;
 
+
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -35,33 +31,37 @@ import com.busreservationsystem.model.Bus;
 import com.busreservationsystem.model.BusDriver;
 import com.busreservationsystem.controller.Administrator;
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.*;
 
 public class adminController implements Initializable {
 
 	@FXML
-	private TableColumn<Bus, Time> arrtimeid;
+	private TableColumn<Bus, LocalTime> arrtimeid;
 
 	@FXML
 	private TableColumn<Bus, Integer> busnoid;
 
 	@FXML
-	private TableColumn<Bus, Time> deptimeid;
+	private TableColumn<Bus, LocalTime> deptimeid;
 	@FXML
-	private TableColumn<Bus, Integer> destinationid;
+	private TableColumn<Bus, String> destinationid;
 
 	@FXML
-	private TableColumn<BusDriver, Integer> driverid;
+	private TableColumn<Bus, String> driverid;
 
 	@FXML
-	private TableColumn<BusDriver, String> sourceid;
+	private TableColumn<Bus, String> sourceid;
 
 	@FXML
 	private TableColumn<Bus, Integer> totalseatsid;
 
 	@FXML
-	private TableColumn<Bus, Integer> priceid;
+	private TableColumn<Bus, Double> priceid;
+	
+    @FXML
+    private TableColumn<Bus, LocalDate> datetableId;
 
 	@FXML
 	private DatePicker dateId;
@@ -118,6 +118,8 @@ public class adminController implements Initializable {
 		alert.setContentText("Bus added Succesfuly");
 		alert.showAndWait();
 		
+		refreshTable();
+		
 
 	}
 	
@@ -125,42 +127,91 @@ public class adminController implements Initializable {
 
 	@FXML
 	private void refreshTable() {
-		/*
-		 * try { BusList.clear();
-		 * 
-		 * query = "SELECT * FROM `bus`"; preparedStatement =
-		 * connection.prepareStatement(query); resultSet =
-		 * preparedStatement.executeQuery();
-		 * 
-		 * while (resultSet.next()){ BusList.add(new
-		 * Bus(resultSet.getTime("departure_time"), resultSet.getTime("arrival_time"),
-		 * resultSet.getInt("busTicketPrice"), resultSet.getInt("arrivalTime")));
-		 * tableid.setItems(BusList);
-		 * 
-		 * }
-		 * 
-		 * 
-		 * } catch (SQLException ex) { }
-		 * 
-		 * 
-		 */
+		//create an observablelist to store data
+		ObservableList<Bus> data = FXCollections.observableArrayList();
+		
+		// fetch data from database and add it to the observable list
+        Connection connection = null;
+        PreparedStatement statement = null;
+        
+        try {
+            String url = "jdbc:mysql://localhost:3306/busreservation_db";
+            String databaseUsername = "customer";
+            String password = "Customer123$";
+            
+            connection = DriverManager.getConnection(url, databaseUsername, password);
+            String sql = "SELECT `bus`.`bus_id`, `bus`.`date`, "
+                    + "`bus`.`departure_time`, `bus`.`arrival_time`, `bus`.`bus_ticket_price`, `bus`.`number_of_seats`, "
+                    + "`bus_driver`.`first_name`, `route`.`source`, `route`.`destination` "
+                    + "FROM `bus` "
+                    + "LEFT JOIN `route` ON `bus`.`route_id` = `route`.`route_id` "
+                    + "LEFT JOIN `bus_driver` ON `bus`.`driver_id` = `bus_driver`.`bus_driver_id`";
+            
+            statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+            	int id = resultSet.getInt("bus_id");
+            	Date sqlDate = resultSet.getDate("date");
+            	LocalDate date = sqlDate.toLocalDate();
+            	Time sqldep = resultSet.getTime("departure_time");
+            	LocalTime departureTime = sqldep.toLocalTime();
+            	Time sqlarr = resultSet.getTime("arrival_time");
+            	LocalTime arrivalTime = sqlarr.toLocalTime();
+            	double busTicketPrice = resultSet.getDouble("bus_ticket_price");
+            	int numberOfSeats = resultSet.getInt("number_of_seats");
+            	String name = resultSet.getString("bus_driver.first_name");
+            	String source = resultSet.getString("route.source");
+            	String destination = resultSet.getString("route.destination");
+            	
+            	Route route = new Route(source, destination);
+            	BusDriver driver = new BusDriver();
+            	driver.setFirstName(name);
+            	Bus bus = new Bus(driver, route, date, departureTime, arrivalTime, busTicketPrice, 
+            			numberOfSeats);
+            	bus.setBusId(id);
+            	
+            	data.add(bus);
+            	
+            }
+            
+        } catch(SQLException ex) {
+        	ex.printStackTrace();
+        }
+        
+        tableid.setItems(data);
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		loadData();
+		//initialize columns in table view
+	    busnoid.setCellValueFactory(new PropertyValueFactory<>("busId"));
+	    driverid.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getDrivere().getFirstName()));
+	    sourceid.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getRoute().getSource()));
+	    destinationid.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getRoute().getDestination()));
+	    datetableId.setCellValueFactory(new PropertyValueFactory<>("date"));
+	    deptimeid.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
+	    arrtimeid.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
+	    priceid.setCellValueFactory(new PropertyValueFactory<>("busTicketPrice"));
+	    totalseatsid.setCellValueFactory(new PropertyValueFactory<>("numberOfSeats"));
+	    
+		try {
+			refreshTable();
+		} catch (NullPointerException e) {
+			  Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, e);
+			  Alert alert = new Alert(Alert.AlertType.ERROR);
+			  alert.setTitle("Error");
+			  alert.setHeaderText("An error occurred while loading the table");
+			  alert.setContentText("The table could not be loaded due to a null pointer exception. Please check the code for any errors and try again.");
+			  alert.showAndWait();
+		}
 	}
 
-	public void loadData() {
-		/* connection = DBhandler.getConnection(); */
+	/*public void loadData() {
 		refreshTable();
 
-		busnoid.setCellValueFactory(new PropertyValueFactory<Bus, Integer>("busId"));
-		driverid.setCellValueFactory(new PropertyValueFactory<BusDriver, Integer>("driver"));
-		priceid.setCellValueFactory(new PropertyValueFactory<Bus, Integer>("busTicketPrice"));
-		deptimeid.setCellValueFactory(new PropertyValueFactory<Bus, Time>("departureTime"));
-		arrtimeid.setCellValueFactory(new PropertyValueFactory<Bus, Time>("arrivalTime"));
+		tableid.setItems(data);
 		// sourceid.setCellValueFactory(new PropertyValueFactory<users,String>("type"));
 
-	}
+	} */
 }
+

@@ -273,7 +273,7 @@ public class Reservation {
                 bus.setBusTicketPrice(resultset.getDouble("bus_ticket_price"));
                 bus.setnumberOfSeats(resultset.getInt("number_of_seats"));
 
-                if (!this.isFullyBooked(bus.getBusId(), date, bus.getnumberOfSeats())) {
+                if (!this.isFullyBooked(bus.getBusId(), date, bus.getNumberOfSeats())) {
                     buses.add(bus);
                 }
             }

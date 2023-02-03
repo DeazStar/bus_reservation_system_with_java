@@ -119,7 +119,7 @@ public class Bus {
     }
 
     //getter method for numberOfSeats
-    public int getnumberOfSeats() {
+    public int getNumberOfSeats() {
         return this.numberOfSeats;
     }
 }
