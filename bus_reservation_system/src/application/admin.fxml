@@ -26,17 +26,17 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </TableView>
-      <TextField fx:id="driver_TextField" layoutX="97.0" layoutY="61.0" prefHeight="25.0" prefWidth="112.0" text="driver" />
-      <TextField fx:id="source_TextField" layoutX="415.0" layoutY="59.0" text="source" />
-      <TextField fx:id="price_TextField" layoutX="235.0" layoutY="59.0" text="price" />
-      <TextField fx:id="destination_TextField" layoutX="538.0" layoutY="97.0" text="destination" />
+      <TextField fx:id="driver_TextField" layoutX="97.0" layoutY="61.0" prefHeight="25.0" prefWidth="112.0" promptText="driver" />
+      <TextField fx:id="source_TextField" layoutX="415.0" layoutY="59.0" promptText="source" />
+      <TextField fx:id="price_TextField" layoutX="235.0" layoutY="59.0" promptText="price" />
+      <TextField fx:id="destination_TextField" layoutX="538.0" layoutY="97.0" promptText="destination" />
       <Button fx:id="addbusid" layoutX="16.0" layoutY="71.0" mnemonicParsing="false" onAction="#add" text="Add bus" />
       <Button layoutX="151.0" layoutY="4.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="133.0" text="custumor" />
       <Button layoutX="8.0" layoutY="4.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="133.0" text="Available buses" />
-      <TextField fx:id="totald_TextField" layoutX="585.0" layoutY="58.0" prefHeight="33.0" prefWidth="115.0" text="total seats" />
-      <DatePicker fx:id="dateId" layoutX="98.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" />
-      <TextField fx:id="arrivaltime_TextField" layoutX="235.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" />
-      <TextField fx:id="deptime_TextField" layoutX="381.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" />
+      <TextField fx:id="totald_TextField" layoutX="585.0" layoutY="58.0" prefHeight="33.0" prefWidth="115.0" promptText="total seats" />
+      <DatePicker fx:id="dateId" layoutX="98.0" layoutY="97.0" prefHeight="26.0" prefWidth="112.0" promptText="date of departure" />
+      <TextField fx:id="arrivaltime_TextField" layoutX="235.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" promptText="Departure time" />
+      <TextField fx:id="deptime_TextField" layoutX="381.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" promptText="arrivial time" />
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

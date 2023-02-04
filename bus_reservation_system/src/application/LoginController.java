@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.busreservationsystem.controller.Administrator;
+import com.busreservationsystem.user.CustomerManagment;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -57,7 +59,13 @@ public class LoginController {
 	{
 		if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false)
 		{
-			loginverify(event);
+			try {
+				loginverify(event);
+				
+			} catch (SQLException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else 
 		{
@@ -68,21 +76,14 @@ public class LoginController {
 
 	@SuppressWarnings("null")
 	@FXML
-	public void loginverify(ActionEvent event) throws SQLException {
-
+	public void loginverify(ActionEvent event) throws SQLException, IOException {
+		CustomerManagment c=new CustomerManagment();
+		
+		c.login(nameid.getText(), passid.getText(),event);
+		
 }
 		
-//	public void start(Stage stage) {
-//		try {
-//			Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
-//			Scene scene = new Scene(root);
-//			stage.setScene(scene);
-//			stage.show();
-//			
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//	}	
+
 
  @FXML
  public void tosignup(ActionEvent event) throws IOException {
@@ -93,8 +94,9 @@ public class LoginController {
   stage.show();
  }
  
+ @FXML
  public void toadmin(ActionEvent event) throws IOException {
-  Parent root = FXMLLoader.load(getClass().getResource("admin1.fxml"));
+  Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
   stage = (Stage)((Node)event.getSource()).getScene().getWindow();
   scene = new Scene(root);
   stage.setScene(scene);

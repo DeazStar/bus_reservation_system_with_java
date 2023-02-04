@@ -1,9 +1,14 @@
 package com.busreservationsystem.user;
 
 import com.busreservationsystem.interfaces.FileStorage;
+
+
+import javafx.event.ActionEvent;
+import application.LoginController;
+
 import com.busreservationsystem.base.Address;
 import java.sql.SQLException;
-
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -23,12 +28,17 @@ public class CustomerManagment implements FileStorage {
         this.password = password;
     }
 
-    public Customer login(String username, String password) {
+    public Customer login(String username, String password, ActionEvent event) throws IOException {
         ArrayList<String> userInfo = this.load(username);
         if (userInfo == null) {
             return null;
         } else if (userInfo.get(0).equals(username) && userInfo.get(1).equals(password)) {
-            System.out.println("Login successful");
+            
+        	System.out.println("Login successful");
+        	LoginController l=new LoginController();
+        	l.toadmin(event);
+        	
+                        
             Connection connection = null;
             PreparedStatement statement = null;
             PreparedStatement addressInsert = null;
