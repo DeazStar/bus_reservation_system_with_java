@@ -196,7 +196,8 @@ public class adminController implements Initializable {
 	    
 		try {
 			refreshTable();
-		} catch (NullPointerException e) {
+		}
+		catch (NullPointerException e) {
 			  Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, e);
 			  Alert alert = new Alert(Alert.AlertType.ERROR);
 			  alert.setTitle("Error");
