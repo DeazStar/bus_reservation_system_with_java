@@ -7,36 +7,44 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="415.0" prefWidth="818.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.adminController">
+<AnchorPane prefHeight="487.0" prefWidth="930.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.adminController">
    <children>
-      <TableView fx:id="tableid" layoutX="15.0" layoutY="138.0" prefHeight="268.0" prefWidth="769.0" style="-fx-background-color: #0001;">
+      <TableView fx:id="tableid" layoutX="15.0" layoutY="138.0" prefHeight="332.0" prefWidth="892.0" style="-fx-background-color: #0001;">
         <columns>
-          <TableColumn fx:id="busnoid" prefWidth="51.11111831665039" text="bus no" />
-          <TableColumn fx:id="driverid" prefWidth="94.44441986083984" text="driver name" />
-            <TableColumn fx:id="priceid" prefWidth="63.111083984375" text="price" />
-            <TableColumn fx:id="deptimeid" prefWidth="102.66667175292969" text="departure time" />
-            <TableColumn fx:id="arrtimeid" prefWidth="94.22222900390625" text="arrival time" />
-            <TableColumn fx:id="sourceid" prefWidth="70.22213745117188" text="source" />
-            <TableColumn fx:id="destinationid" prefWidth="95.111083984375" text="destination" />
-            <TableColumn fx:id="totalseatsid" minWidth="0.0" prefWidth="118.22222900390625" text="total seats" />
-            <TableColumn fx:id="datetableId" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="busnoid" prefWidth="70.88887786865234" text="bus no" />
+            <TableColumn fx:id="priceid" prefWidth="100.88887786865234" text="price" />
+            <TableColumn fx:id="deptimeid" prefWidth="124.00004577636719" text="departure time" />
+            <TableColumn fx:id="arrtimeid" prefWidth="146.22219848632812" text="arrival time" />
+            <TableColumn fx:id="sourceid" prefWidth="105.11117553710938" text="source" />
+            <TableColumn fx:id="destinationid" prefWidth="124.44439697265625" text="destination" />
+            <TableColumn fx:id="totalseatsid" minWidth="0.0" prefWidth="88.888916015625" text="total seats" />
+            <TableColumn fx:id="datetableId" prefWidth="134.0" text="Date" />
         </columns>
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </TableView>
-      <TextField fx:id="driver_TextField" layoutX="97.0" layoutY="61.0" prefHeight="25.0" prefWidth="112.0" promptText="driver" />
-      <TextField fx:id="source_TextField" layoutX="415.0" layoutY="59.0" promptText="source" />
-      <TextField fx:id="price_TextField" layoutX="235.0" layoutY="59.0" promptText="price" />
-      <TextField fx:id="destination_TextField" layoutX="538.0" layoutY="97.0" promptText="destination" />
-      <Button fx:id="addbusid" layoutX="16.0" layoutY="71.0" mnemonicParsing="false" onAction="#add" text="Add bus" />
-      <Button layoutX="151.0" layoutY="4.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="133.0" text="custumor" />
-      <Button layoutX="8.0" layoutY="4.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="133.0" text="Available buses" />
-      <TextField fx:id="totald_TextField" layoutX="585.0" layoutY="58.0" prefHeight="33.0" prefWidth="115.0" promptText="total seats" />
-      <DatePicker fx:id="dateId" layoutX="98.0" layoutY="97.0" prefHeight="26.0" prefWidth="112.0" promptText="date of departure" />
-      <TextField fx:id="arrivaltime_TextField" layoutX="235.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" promptText="Departure time" />
-      <TextField fx:id="deptime_TextField" layoutX="381.0" layoutY="97.0" prefHeight="26.0" prefWidth="106.0" promptText="arrivial time" />
+      <TextField fx:id="source_TextField" layoutX="136.0" layoutY="62.0" prefHeight="25.0" prefWidth="142.0" promptText="source" />
+      <TextField fx:id="price_TextField" alignment="CENTER" layoutX="695.0" layoutY="74.0" prefHeight="38.0" prefWidth="87.0" promptText="Price" />
+      <TextField fx:id="destination_TextField" layoutX="136.0" layoutY="99.0" prefHeight="25.0" prefWidth="142.0" promptText="destination" />
+      <Button fx:id="addbusid" layoutX="16.0" layoutY="71.0" mnemonicParsing="false" onAction="#add" prefHeight="36.0" prefWidth="70.0" text="Add bus">
+         <font>
+            <Font name="Agency FB Bold" size="14.0" />
+         </font></Button>
+      <Button layoutX="158.0" layoutY="10.0" mnemonicParsing="false" onAction="#toViewCustomer" prefHeight="38.0" prefWidth="133.0" text="Custumor">
+         <font>
+            <Font name="Agency FB Bold" size="14.0" />
+         </font></Button>
+      <Button layoutX="12.0" layoutY="10.0" mnemonicParsing="false" onAction="#toadmin" prefHeight="38.0" prefWidth="133.0" text="Available buses">
+         <font>
+            <Font name="Agency FB Bold" size="14.0" />
+         </font></Button>
+      <TextField fx:id="totald_TextField" layoutX="520.0" layoutY="97.0" prefHeight="24.0" prefWidth="149.0" promptText="total seats" />
+      <DatePicker fx:id="dateId" layoutX="520.0" layoutY="61.0" prefHeight="26.0" prefWidth="148.0" promptText="date of departure" />
+      <TextField fx:id="arrivaltime_TextField" layoutX="318.0" layoutY="61.0" prefHeight="26.0" prefWidth="164.0" promptText="Departure time" />
+      <TextField fx:id="deptime_TextField" layoutX="319.0" layoutY="99.0" prefHeight="26.0" prefWidth="164.0" promptText="arrivial time" />
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />
