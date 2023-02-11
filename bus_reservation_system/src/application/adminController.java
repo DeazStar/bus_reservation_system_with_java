@@ -47,7 +47,6 @@ public class adminController implements Initializable {
 	
 	private Stage stage;
 	private Scene scene;
-	private Parent root;
 	
 	
 	@FXML
@@ -226,6 +225,7 @@ public class adminController implements Initializable {
 	  stage.setScene(scene);
 	  stage.show();
 	 }
+	@FXML
 	 public void toadmin(ActionEvent event) throws IOException {
 		  Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -233,5 +233,14 @@ public class adminController implements Initializable {
 		  stage.setScene(scene);
 		  stage.show();
 		 }
+	@FXML
+	 public void ToaddORview(ActionEvent event) throws IOException {
+		  Parent root = FXMLLoader.load(getClass().getResource("addORview.fxml"));
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  stage.setScene(scene);
+		  stage.show();
+		 }
+	
 }
 

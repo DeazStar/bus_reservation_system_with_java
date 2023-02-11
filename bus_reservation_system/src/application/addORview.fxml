@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="407.0" prefWidth="396.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.addORviewController">
+   <children>
+      <Button layoutX="84.0" layoutY="95.0" mnemonicParsing="false" onAction="#toAddBus" prefHeight="46.0" prefWidth="233.0" text="Add Bus">
+         <font>
+            <Font name="Agency FB Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="86.0" layoutY="184.0" mnemonicParsing="false" onAction="#toAddDriver" prefHeight="46.0" prefWidth="233.0" text="Add driver">
+         <font>
+            <Font name="Agency FB Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="85.0" layoutY="279.0" mnemonicParsing="false" onAction="#toViewCustomer" prefHeight="46.0" prefWidth="233.0" text="View customer">
+         <font>
+            <Font name="Agency FB Bold" size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="323.0" layoutY="16.0" mnemonicParsing="false" onAction="#tologin" prefHeight="33.0" prefWidth="54.0" text="Back">
+         <font>
+            <Font name="Agency FB Bold" size="15.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
