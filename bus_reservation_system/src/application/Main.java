@@ -9,10 +9,11 @@ import java.io.IOException;
 
 public class Main extends Application 
 {
+	 
 	@Override
     public void start(Stage primaryStage) {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("login.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("reservation.fxml"));
             Scene scene = new Scene(parent);
             primaryStage.setTitle("SELAM BUS");
             primaryStage.setScene(scene);

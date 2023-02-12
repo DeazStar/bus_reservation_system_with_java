@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.busreservationsystem.base.Address;
@@ -19,9 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
@@ -132,25 +129,6 @@ public class SignupController {
     	managment.signup(customer, username.getText(), password.getText());
     	
     	managment.store();
-    	
-    	
-         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-         alert.setContentText("Are you sure ?");
-         Optional<ButtonType> result = alert.showAndWait();
-         if (result.get() == ButtonType.OK) {
-
-             try {
-                 Parent parent = FXMLLoader.load(getClass().getResource("login.fxml"));
-                 Scene scene = new Scene(parent);
-                 Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-                 window.setScene(scene);
-                 window.show();
-
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
-
-         }
     }
 	
 }

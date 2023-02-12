@@ -7,9 +7,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="500.0" prefWidth="900.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ViewCustomerController">
+<AnchorPane prefHeight="537.0" prefWidth="1223.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ViewCustomerController">
    <children>
-      <TableView fx:id="tableid" layoutX="20.0" layoutY="67.0" prefHeight="403.0" prefWidth="858.0" style="-fx-background-color: #0001;">
+      <TableView fx:id="tableid" layoutX="20.0" layoutY="67.0" prefHeight="445.0" prefWidth="1202.0" style="-fx-background-color: #0001;">
         <columns>
           <TableColumn fx:id="idid" prefWidth="52.00003433227539" text="id" />
           <TableColumn fx:id="firstnameID" prefWidth="123.33332824707031" text="first_name" />
@@ -17,7 +17,10 @@
             <TableColumn fx:id="dobID" prefWidth="149.33334350585938" text="date_of_birth" />
             <TableColumn fx:id="emailID" minWidth="4.666656494140625" prefWidth="114.88885498046875" text="email" />
             <TableColumn fx:id="phoneID" prefWidth="143.11114501953125" text="phone_number" />
-            <TableColumn fx:id="adressID" prefWidth="148.22222900390625" text="address_id" />
+            <TableColumn fx:id="streetAddressId" prefWidth="148.22222900390625" text="street_address" />
+            <TableColumn fx:id="cityId" prefWidth="141.0" text="city" />
+            <TableColumn fx:id="regionId" prefWidth="123.0" text="region" />
+            <TableColumn fx:id="genderId" prefWidth="75.0" text="gender" />
         </columns>
       </TableView>
       <Text fill="#46cae8" layoutX="36.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Customers" textAlignment="JUSTIFY">
@@ -25,7 +28,7 @@
             <Font name="Agency FB Bold" size="21.0" />
          </font>
       </Text>
-      <Button layoutX="777.0" layoutY="9.0" mnemonicParsing="false" onAction="#toadmin" prefHeight="44.0" prefWidth="81.0" text="Back" textFill="#723535">
+      <Button layoutX="1038.0" layoutY="8.0" mnemonicParsing="false" onAction="#toadmin" prefHeight="44.0" prefWidth="81.0" text="Back" textFill="#723535">
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font>

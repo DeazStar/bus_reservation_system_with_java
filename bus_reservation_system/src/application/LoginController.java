@@ -77,9 +77,9 @@ public class LoginController {
 	@SuppressWarnings("null")
 	@FXML
 	public void loginverify(ActionEvent event) throws SQLException, IOException {
-		CustomerManagment c=new CustomerManagment();
+		CustomerManagment c =new CustomerManagment();
 		
-		c.login(nameid.getText(), passid.getText(),event);
+		c.login(nameid.getText(), passid.getText());
 		
 }
 		

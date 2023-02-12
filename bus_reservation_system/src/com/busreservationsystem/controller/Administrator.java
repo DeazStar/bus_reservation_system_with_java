@@ -5,6 +5,9 @@ import com.busreservationsystem.base.*;
 
 import java.math.BigDecimal;
 import java.sql.*;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
+
 import com.busreservationsystem.interfaces.FileStorage;
 import java.math.*;
 
@@ -29,26 +32,39 @@ public class Administrator implements FileStorage {
             connection = DriverManager.getConnection(url, username, password);
             connection.setAutoCommit(false);
 
-            String sql = "UPDATE bus SET departure_time = ?,"
-                    + "arrival_time = ?, bus_ticket_price = ?, number_of_seats = ? " + "WHERE bus_id = ?";
+            String sql = "UPDATE bus SET date = ?, departure_time = ?,"
+                    + "arrival_time = ?, bus_ticket_price = ?, number_of_seats = ? WHERE bus_id = ?";
 
             busEdit = connection.prepareStatement(sql);
-            busEdit.setTime(1, Time.valueOf(newBus.getDepartureTime()));
-            busEdit.setTime(2, Time.valueOf(newBus.getArrivalTime()));
+            Date date = Date.valueOf(newBus.getDate());
+            busEdit.setDate(1, date);
+            busEdit.setTime(2, Time.valueOf(newBus.getDepartureTime()));
+            busEdit.setTime(3, Time.valueOf(newBus.getArrivalTime()));
             BigDecimal price = BigDecimal.valueOf(newBus.getBusTicketPrice()).setScale(2, RoundingMode.HALF_UP);
-            busEdit.setBigDecimal(3, price);
-            busEdit.setInt(4, newBus.getNumberOfSeats());
-            busEdit.setInt(5, bus.getBusId());
-
+            busEdit.setBigDecimal(4, price);
+            busEdit.setInt(5, newBus.getNumberOfSeats());
+            busEdit.setInt(6, bus.getBusId());
+            
             busEdit.executeUpdate();
+            
+            String routeIdSql = "SELECT route_id FROM bus WHERE bus_id = ?";
+            
+            PreparedStatement routeIdQuery = connection.prepareStatement(routeIdSql);
+            
+            routeIdQuery.setInt(1, bus.getBusId());
+            
+            ResultSet result = routeIdQuery.executeQuery();
+            
+            if (result.next()) {
+            	int routeId = result.getInt("route_id");
+                String routeSql = "UPDATE route SET source = ?, destination = ? WHERE route_id = ?";
+                routeEdit = connection.prepareStatement(routeSql);
+                routeEdit.setString(1, newBus.getRoute().getSource());
+                routeEdit.setString(2, newBus.getRoute().getDestination());
+                routeEdit.setInt(3, routeId);
 
-            String routeSql = "UPDATE route source = ?, destination = ? WHERE route_id = ?";
-            routeEdit = connection.prepareStatement(routeSql);
-            routeEdit.setString(1, newBus.getRoute().getSource());
-            routeEdit.setString(2, newBus.getRoute().getDestination());
-            routeEdit.setInt(3, bus.getRoute().getRouteId());
-
-            routeEdit.executeUpdate();
+               System.out.println(routeEdit.executeUpdate());
+            }
 
             connection.commit();
 
@@ -87,23 +103,37 @@ public class Administrator implements FileStorage {
             //SET FOREIGN KEY_CHECKS=0
             Statement disableFKCheck = connection.createStatement();
             disableFKCheck.execute("SET FOREIGN_KEY_CHECKS=0");
-
+            String routeIdSql = "SELECT route_id FROM bus WHERE bus_id = ?";
+            
+            PreparedStatement routeIdQuery = connection.prepareStatement(routeIdSql);
+            
+            routeIdQuery.setInt(1, bus.getBusId());
+            System.out.println(bus.getBusId());
+            
+            ResultSet result = routeIdQuery.executeQuery();
+            
+            
+            if (result.next()) {
+                int routeId = result.getInt("route_id");
+                System.out.println(routeId);
+                String routeSql = "DELETE from route WHERE route_id = ?";
+                routeEdit = connection.prepareStatement(routeSql);
+                routeEdit.setInt(1, routeId);
+                routeEdit.executeUpdate();	
+            }
+            
             String sql = "DELETE FROM bus WHERE bus_id = ?";
             busEdit = connection.prepareStatement(sql);
             busEdit.setInt(1, bus.getBusId());
             busEdit.executeUpdate();
-
-            String routeSql = "DELETE from route WHERE route_id = ?";
-            routeEdit = connection.prepareStatement(routeSql);
-            routeEdit.setInt(1, bus.getRoute().getRouteId());
-            routeEdit.executeUpdate();
-
+            
+           
+            
             String driverSql = "UPDATE bus_driver SET assigned_bus = null "
                     + "WHERE assigned_bus = ?";
             driverEdit = connection.prepareStatement(driverSql);
             driverEdit.setInt(1, bus.getBusId());
             driverEdit.executeUpdate();
-
             //SET FOREIGN_KEY_CHECKS=1;
             Statement enableFKCheck = connection.createStatement();
             enableFKCheck.execute("SET FOREIGN_KEY_CHECKS=1");

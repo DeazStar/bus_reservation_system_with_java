@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="503.0" prefWidth="1058.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.adminController">
+<AnchorPane prefHeight="551.0" prefWidth="1058.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.adminController">
    <children>
-      <TableView fx:id="tableid" layoutX="13.0" layoutY="146.0" prefHeight="332.0" prefWidth="1038.0" style="-fx-background-color: #0001;">
+      <TableView fx:id="tableid" layoutX="13.0" layoutY="146.0" prefHeight="394.0" prefWidth="1038.0" style="-fx-background-color: #0001;">
         <columns>
           <TableColumn fx:id="busnoid" prefWidth="70.88887786865234" text="bus no" />
             <TableColumn fx:id="driverid" prefWidth="113.99998474121094" text="Driver id" />
@@ -28,9 +28,9 @@
          </cursor>
       </TableView>
       <TextField fx:id="source_TextField" layoutX="143.0" layoutY="67.0" prefHeight="25.0" prefWidth="142.0" promptText="source" />
-      <TextField fx:id="price_TextField" alignment="CENTER" layoutX="702.0" layoutY="79.0" prefHeight="38.0" prefWidth="87.0" promptText="Price" />
+      <TextField fx:id="price_TextField" alignment="CENTER" layoutX="730.0" layoutY="74.0" prefHeight="38.0" prefWidth="87.0" promptText="Price" />
       <TextField fx:id="destination_TextField" layoutX="143.0" layoutY="104.0" prefHeight="25.0" prefWidth="142.0" promptText="destination" />
-      <Button fx:id="addbusid" layoutX="23.0" layoutY="76.0" mnemonicParsing="false" onAction="#add" prefHeight="36.0" prefWidth="70.0" text="Add bus">
+      <Button fx:id="addbusid" layoutX="23.0" layoutY="76.0" mnemonicParsing="false" onAction="#add" prefHeight="36.0" prefWidth="93.0" text="Add bus">
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font></Button>
@@ -42,8 +42,8 @@
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font></Button>
-      <TextField fx:id="totald_TextField" layoutX="527.0" layoutY="102.0" prefHeight="24.0" prefWidth="149.0" promptText="total seats" />
-      <DatePicker fx:id="dateId" layoutX="527.0" layoutY="66.0" prefHeight="26.0" prefWidth="148.0" promptText="date of departure" />
+      <TextField fx:id="totald_TextField" layoutX="527.0" layoutY="102.0" prefHeight="26.0" prefWidth="164.0" promptText="total seats" />
+      <DatePicker fx:id="dateId" layoutX="527.0" layoutY="66.0" prefHeight="26.0" prefWidth="164.0" promptText="date of departure" />
       <TextField fx:id="arrivaltime_TextField" layoutX="325.0" layoutY="66.0" prefHeight="26.0" prefWidth="164.0" promptText="Departure time" />
       <TextField fx:id="deptime_TextField" layoutX="326.0" layoutY="104.0" prefHeight="26.0" prefWidth="164.0" promptText="arrivial time" />
    </children>

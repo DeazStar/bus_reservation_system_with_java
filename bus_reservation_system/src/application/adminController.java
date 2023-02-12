@@ -1,6 +1,5 @@
 package application;
 
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -23,13 +22,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import javax.swing.JOptionPane;
 
@@ -42,13 +44,13 @@ import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.*;
-
+import application.EditBusController;
 public class adminController implements Initializable {
-	
+
 	private Stage stage;
 	private Scene scene;
-	
-	
+	private Parent root;
+
 	@FXML
 	private TableColumn<Bus, LocalTime> arrtimeid;
 
@@ -71,9 +73,9 @@ public class adminController implements Initializable {
 
 	@FXML
 	private TableColumn<Bus, Double> priceid;
-	
-    @FXML
-    private TableColumn<Bus, LocalDate> datetableId;
+
+	@FXML
+	private TableColumn<Bus, LocalDate> datetableId;
 
 	@FXML
 	private DatePicker dateId;
@@ -102,7 +104,7 @@ public class adminController implements Initializable {
 	private TextField totald_TextField;
 	@FXML
 	private TextField price_TextField;
-	
+
 	@FXML
 	private void add() {
 		Bus bus = new Bus();
@@ -125,114 +127,189 @@ public class adminController implements Initializable {
 
 		admin.addBus(bus);
 		admin.store();
-		
+
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setContentText("Bus added Succesfuly");
 		alert.showAndWait();
-		
+
 		refreshTable();
-		
 
 	}
-	
-	
 
 	@FXML
 	private void refreshTable() {
-		//create an observablelist to store data
+		// create an observablelist to store data
 		ObservableList<Bus> data = FXCollections.observableArrayList();
-		
+
 		// fetch data from database and add it to the observable list
-        Connection connection = null;
-        PreparedStatement statement = null;
-        
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String databaseUsername = "customer";
-            String password = "Customer123$";
-            
-            connection = DriverManager.getConnection(url, databaseUsername, password);
-            String sql = "SELECT `bus`.`bus_id`, `bus`.`date`, "
-                    + "`bus`.`departure_time`, `bus`.`arrival_time`, `bus`.`bus_ticket_price`, `bus`.`number_of_seats`, "
-                    + "`bus_driver`.`first_name`, `route`.`source`, `route`.`destination` "
-                    + "FROM `bus` "
-                    + "LEFT JOIN `route` ON `bus`.`route_id` = `route`.`route_id` "
-                    + "LEFT JOIN `bus_driver` ON `bus`.`driver_id` = `bus_driver`.`bus_driver_id`";
-            
-            statement = connection.prepareStatement(sql);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-            	int id = resultSet.getInt("bus_id");
-            	Date sqlDate = resultSet.getDate("date");
-            	LocalDate date = sqlDate.toLocalDate();
-            	Time sqldep = resultSet.getTime("departure_time");
-            	LocalTime departureTime = sqldep.toLocalTime();
-            	Time sqlarr = resultSet.getTime("arrival_time");
-            	LocalTime arrivalTime = sqlarr.toLocalTime();
-            	double busTicketPrice = resultSet.getDouble("bus_ticket_price");
-            	int numberOfSeats = resultSet.getInt("number_of_seats");
-            	String name = resultSet.getString("bus_driver.first_name");
-            	String source = resultSet.getString("route.source");
-            	String destination = resultSet.getString("route.destination");
-            	
-            	Route route = new Route(source, destination);
-            	BusDriver driver = new BusDriver();
-            	driver.setFirstName(name);
-            	Bus bus = new Bus(driver, route, date, departureTime, arrivalTime, busTicketPrice, 
-            			numberOfSeats);
-            	bus.setBusId(id);
-            	
-            	data.add(bus);
-            	
-            }
-            
-        } catch(SQLException ex) {
-        	ex.printStackTrace();
-        }
-        
-        tableid.setItems(data);
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String databaseUsername = "customer";
+			String password = "Customer123$";
+
+			connection = DriverManager.getConnection(url, databaseUsername, password);
+			String sql = "SELECT `bus`.`bus_id`, `bus`.`date`, "
+					+ "`bus`.`departure_time`, `bus`.`arrival_time`, `bus`.`bus_ticket_price`, `bus`.`number_of_seats`, "
+					+ "`bus_driver`.`first_name`, `route`.`source`, `route`.`destination` " + "FROM `bus` "
+					+ "LEFT JOIN `route` ON `bus`.`route_id` = `route`.`route_id` "
+					+ "LEFT JOIN `bus_driver` ON `bus`.`driver_id` = `bus_driver`.`bus_driver_id`";
+
+			statement = connection.prepareStatement(sql);
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				int id = resultSet.getInt("bus_id");
+				Date sqlDate = resultSet.getDate("date");
+				LocalDate date = sqlDate.toLocalDate();
+				Time sqldep = resultSet.getTime("departure_time");
+				LocalTime departureTime = sqldep.toLocalTime();
+				Time sqlarr = resultSet.getTime("arrival_time");
+				LocalTime arrivalTime = sqlarr.toLocalTime();
+				double busTicketPrice = resultSet.getDouble("bus_ticket_price");
+				int numberOfSeats = resultSet.getInt("number_of_seats");
+				String name = resultSet.getString("bus_driver.first_name");
+				String source = resultSet.getString("route.source");
+				String destination = resultSet.getString("route.destination");
+
+				Route route = new Route(source, destination);
+				BusDriver driver = new BusDriver();
+				driver.setFirstName(name);
+				Bus bus = new Bus(driver, route, date, departureTime, arrivalTime, busTicketPrice, numberOfSeats);
+				bus.setBusId(id);
+
+				data.add(bus);
+
+			}
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+
+		tableid.setItems(data);
 	}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		//initialize columns in table view
-	    busnoid.setCellValueFactory(new PropertyValueFactory<>("busId"));
-	    sourceid.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getRoute().getSource()));
-	    destinationid.setCellValueFactory(cellData-> new SimpleStringProperty(cellData.getValue().getRoute().getDestination()));
-	    datetableId.setCellValueFactory(new PropertyValueFactory<>("date"));
-	    deptimeid.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
-	    arrtimeid.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
-	    priceid.setCellValueFactory(new PropertyValueFactory<>("busTicketPrice"));
-	    totalseatsid.setCellValueFactory(new PropertyValueFactory<>("numberOfSeats"));
-	    
+		// create columns with delete and edit buttons for each row
+		Administrator admin = new Administrator();
+		TableColumn<Bus, Void> actionCol = new TableColumn<>("Action");
+		Callback<TableColumn<Bus, Void>, TableCell<Bus, Void>> cellFactory = new Callback<TableColumn<Bus, Void>, TableCell<Bus, Void>>() {
+			@Override
+			public TableCell<Bus, Void> call(final TableColumn<Bus, Void> param) {
+				final TableCell<Bus, Void> cell = new TableCell<Bus, Void>() {
+					private final Button deleteButton = new Button("Delete");
+					private final Button editButton = new Button("Edit");
+
+					{
+						deleteButton.setOnAction((ActionEvent event) -> {
+							Bus data = getTableView().getItems().get(getIndex());
+							// call the delete method
+							admin.removeBus(data);
+							getTableView().getItems().remove(data);
+							refreshTable();
+						});
+						editButton.setOnAction((ActionEvent event) -> {
+							Bus data = getTableView().getItems().get(getIndex());
+							
+							FXMLLoader loader = new FXMLLoader(getClass().getResource("editBus.fxml"));
+							
+							  Parent root;
+							    try {
+							        root = loader.load();
+							    } catch (IOException e) {
+							        e.printStackTrace();
+							        return;
+							    }
+							    
+							EditBusController editController = loader.getController();
+							
+						    Stage stage = new Stage();
+						    stage.setScene(new Scene(root));
+						    stage.showAndWait();
+						    
+						    
+					        Bus updatedBus = editController.geteUpdateBus();
+					        
+					        updatedBus.setDriver(data.getDrivere());
+					        updatedBus.getRoute().setRouteId(data.getRoute().getRouteId());
+							// call the edit method
+							admin.editBus(data, updatedBus); 
+							
+
+							/*int selectedIndex = getTableRow().getIndex();
+							tableid.getItems().set(selectedIndex, updatedBus);*/
+							refreshTable();
+						});
+					}
+
+					@Override
+					public void updateItem(Void item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setGraphic(null);
+						} else {
+							HBox buttons = new HBox();
+							buttons.getChildren().addAll(editButton, deleteButton);
+							setGraphic(buttons);
+						}
+					}
+				};
+				return cell;
+			}
+		};
+
+		actionCol.setCellFactory(cellFactory);
+		tableid.getColumns().addAll(actionCol);
+		// initialize columns in table view
+		busnoid.setCellValueFactory(new PropertyValueFactory<>("busId"));
+		driverid.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getDrivere().getFirstName()));
+		sourceid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRoute().getSource()));
+		destinationid.setCellValueFactory(
+				cellData -> new SimpleStringProperty(cellData.getValue().getRoute().getDestination()));
+		datetableId.setCellValueFactory(new PropertyValueFactory<>("date"));
+		deptimeid.setCellValueFactory(new PropertyValueFactory<>("departureTime"));
+		arrtimeid.setCellValueFactory(new PropertyValueFactory<>("arrivalTime"));
+		priceid.setCellValueFactory(new PropertyValueFactory<>("busTicketPrice"));
+		totalseatsid.setCellValueFactory(new PropertyValueFactory<>("numberOfSeats"));
+
+		// make the table editable
+		tableid.setEditable(true);
+		// the try block should be updated
 		try {
 			refreshTable();
+		} catch (NullPointerException e) {
+			Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, e);
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Error");
+			alert.setHeaderText("An error occurred while loading the table");
+			alert.setContentText(
+					"The table could not be loaded due to a null pointer exception. Please check the code for any errors and try again.");
+			alert.showAndWait();
 		}
-		catch (NullPointerException e) {
-			  Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, e);
-			  Alert alert = new Alert(Alert.AlertType.ERROR);
-			  alert.setTitle("Error");
-			  alert.setHeaderText("An error occurred while loading the table");
-			  alert.setContentText("The table could not be loaded due to a null pointer exception. Please check the code for any errors and try again.");
-			  alert.showAndWait();
-		}
+		
 	}
+
 	@FXML
-	 public void toViewCustomer(ActionEvent event) throws IOException {
-	  Parent root = FXMLLoader.load(getClass().getResource("ViewCustomer.fxml"));
-	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-	  scene = new Scene(root);
-	  stage.setScene(scene);
-	  stage.show();
-	 }
+	public void toViewCustomer(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("viewCustomer.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
+	
 	@FXML
-	 public void toadmin(ActionEvent event) throws IOException {
-		  Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
-		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		  scene = new Scene(root);
-		  stage.setScene(scene);
-		  stage.show();
-		 }
+	public void toadmin(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
+	
 	@FXML
 	 public void ToaddORview(ActionEvent event) throws IOException {
 		  Parent root = FXMLLoader.load(getClass().getResource("addORview.fxml"));
@@ -240,7 +317,6 @@ public class adminController implements Initializable {
 		  scene = new Scene(root);
 		  stage.setScene(scene);
 		  stage.show();
-		 }
-	
-}
+	}
 
+}

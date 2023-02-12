@@ -17,286 +17,288 @@ import java.util.ArrayList;
 
 public class Reservation {
 
-    private int seatNumber;
-    private LocalDate date;
-    private LocalTime time;
-    private Bus bus;
-    private Customer customer;
+	private int seatNumber;
+	private LocalDate date;
+	private LocalTime time;
+	private Bus bus;
+	private Customer customer;
 
-    public Reservation(Customer customer, Bus bus) {
-        this.customer = customer;
-        this.bus = bus;
-    }
+	public Reservation(Customer customer, Bus bus) {
+		this.customer = customer;
+		this.bus = bus;
+	}
 
-    public Reservation() {
-    }
+	public Reservation() {
+	}
 
-    public void setSeatNumber(int seatNumber) {
-        this.seatNumber = this.seatNumber;
+	public void setSeatNumber(int seatNumber) {
+		this.seatNumber = this.seatNumber;
 
-    }
+	}
 
-    public int getSeatNumber() {
-        return this.seatNumber;
-    }
+	public int getSeatNumber() {
+		return this.seatNumber;
+	}
 
-    // we may not need this
-    public boolean isBusAvailability() {
-        //implementation of checkAvailability method
+	// we may not need this
+	public boolean isBusAvailability() {
+		// implementation of checkAvailability method
 
-        return false;
-    }
+		return false;
+	}
 
-    public boolean isSeatAvailable(Bus bus, int seatNumber) {
-        //implementation of the isSeatAvailable method
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
-            String query = "SELECT seat FROM reservation WHERE bus_id = ?";
-            statement = connection.prepareStatement(query);
-            statement.setInt(1, bus.getBusId());
+	public boolean isSeatAvailable(Bus bus, int seatNumber) {
+		// implementation of the isSeatAvailable method
+		Connection connection = null;
+		PreparedStatement statement = null;
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
+			String query = "SELECT seat FROM reservation WHERE bus_id = ?";
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, bus.getBusId());
 
-            ResultSet resultSet = statement.executeQuery();
+			ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()) {
-                if (resultSet.getInt("seat") == seatNumber) {
-                    return false;
-                }
-            }
+			while (resultSet.next()) {
+				if (resultSet.getInt("seat") == seatNumber) {
+					return false;
+				}
+			}
 
-            connection.commit();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            try {
-                statement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+			connection.commit();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				statement.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-    public void processPayment(Bus bus, double amount) {
-        // change it to try and catch
-        double change = bus.getBusTicketPrice() - amount;
+	public void processPayment(Bus bus, double amount) {
+		// change it to try and catch
+		double change = bus.getBusTicketPrice() - amount;
 
-        if (change < 0) {
-            System.out.println("card declined");
-        } else {
-            System.out.println("here is your change " + change);
-        }
-    }
+		if (change < 0) {
+			System.out.println("card declined");
+		} else {
+			System.out.println("here is your change " + change);
+		}
+	}
 
-    /*public boolean confirmPayment(Bus bus, double amount) {
-        //implementation of the confirmPayment method
-        if (bus.getBusTicketPrice() )
+	/*
+	 * public boolean confirmPayment(Bus bus, double amount) { //implementation of
+	 * the confirmPayment method if (bus.getBusTicketPrice() )
+	 * 
+	 * return false; }
+	 */
+	public void reserveSeat(Customer customer, int seatNumber, Bus bus, double payment) {
+		// implementaion
+		LocalDate today = LocalDate.now();
+		LocalTime time = LocalTime.now();
+		this.processPayment(bus, payment);
+		Connection connection = null;
+		PreparedStatement statement = null;
 
-        return false;
-    }*/
-    public void reserveSeat(Customer customer, int seatNumber, Bus bus, double payment) {
-        // implementaion
-        LocalDate today = LocalDate.now();
-        LocalTime time = LocalTime.now();
-        this.processPayment(bus, payment);
-        Connection connection = null;
-        PreparedStatement statement = null;
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
 
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
+			String sql = "INSERT INTO reservation(customer_id, seat," + " bus_id, date, time) VALUES (?, ?, ?, ?, ?)";
 
-            String sql = "INSERT INTO reservation(customer_id, seat,"
-                    + " bus_id, date, time) VALUES (?, ?, ?, ?, ?)";
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, customer.getCustomerId());
+			statement.setInt(2, seatNumber);
+			statement.setInt(3, bus.getBusId());
+			statement.setDate(4, Date.valueOf(today));
+			statement.setTime(5, Time.valueOf(time));
+			statement.executeUpdate();
+			connection.commit();
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException exc) {
+				exc.printStackTrace();
+			}
+		}
 
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1, customer.getCustomerId());
-            statement.setInt(2, seatNumber);
-            statement.setInt(3, bus.getBusId());
-            statement.setDate(4, Date.valueOf(today));
-            statement.setTime(5, Time.valueOf(time));
-            statement.executeUpdate();
+	}
 
-            connection.commit();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException exc) {
-                exc.printStackTrace();
-            }
-        }
+	public void cancelReservation(int reservationId) {
+		// implementation of the cancelReservation
+		Connection connection = null;
+		PreparedStatement statement = null;
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
+			String query = "DELETE FROM reservation WHERE reservation_id = ?";
+			statement = connection.prepareStatement(query);
+			statement.setInt(1, reservationId);
+			statement.executeUpdate();
 
-    }
+			connection.commit();
+			// refine it
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	// new method
 
-    public void cancelReservation(int reservationId) {
-        //implementation of the cancelReservation
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
-            String query = "DELETE FROM reservation WHERE reservation_id = ?";
-            statement = connection.prepareStatement(query);
-            statement.setInt(1, reservationId);
-            statement.executeUpdate();
+	public boolean isFullyBooked(int busId, LocalDate date, int numberOfSeat) {
+		Connection connection = null;
+		PreparedStatement statement = null;
+		int bookedSeats = 0;
+		int totalSeats = 0;
+		boolean fullyBooked = false;
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, username, password);
 
-            connection.commit();
-            // refine it
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    //new method 
+			// Get the number of booked seats for the specified bus on the specified date
+			String bookedSeatsSql = "SELECT COUNT(*) FROM reservation WHERE bus_id = ?"; /* AND date = ?"; */
+			statement = connection.prepareStatement(bookedSeatsSql);
+			statement.setInt(1, busId);
+//            statement.setDate(2, Date.valueOf(date));
+			ResultSet bookedSeatsResult = statement.executeQuery();
+			if (bookedSeatsResult.next()) {
+				bookedSeats = bookedSeatsResult.getInt(1);
+			}
 
-    public boolean isFullyBooked(int busId, LocalDate date, int numberOfSeat) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        int bookedSeats = 0;
-        int totalSeats = 0;
-        boolean fullyBooked = false;
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, username, password);
+			if (bookedSeats >= numberOfSeat) {
+				fullyBooked = true;
+			}
+		} catch (SQLException exc) {
+			exc.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return fullyBooked;
+	}
 
-            // Get the number of booked seats for the specified bus on the specified date
-            String bookedSeatsSql = "SELECT COUNT(*) FROM reservation WHERE bus_id = ? AND date = ?";
-            statement = connection.prepareStatement(bookedSeatsSql);
-            statement.setInt(1, busId);
-            statement.setDate(2, Date.valueOf(date));
-            ResultSet bookedSeatsResult = statement.executeQuery();
-            if (bookedSeatsResult.next()) {
-                bookedSeats = bookedSeatsResult.getInt(1);
-            }
+	// new method
+	public ArrayList<Bus> showAvailableBus(LocalDate date, String source, String destination) {
+		// it works but and tested
+		// what about the seat ?
+		Connection connection = null;
+		PreparedStatement statement = null;
+		PreparedStatement routeRecover = null;
+		ArrayList<Bus> buses = new ArrayList<Bus>();
+		try {
+			BusDriver driver = new BusDriver();
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
 
-            if (bookedSeats >= numberOfSeat) {
-                fullyBooked = true;
-            }
-        } catch (SQLException exc) {
-            exc.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return fullyBooked;
-    }
+			connection = DriverManager.getConnection(url, username, password);
 
-    //new method
-    public ArrayList<Bus> showAvailableBus(LocalDate date, LocalTime time) {
-        // it works but and tested 
-        // what about the seat ?
-        Connection connection = null;
-        PreparedStatement statement = null;
-        PreparedStatement routeRecover = null;
-        Bus bus = new Bus();
-        ArrayList<Bus> buses = new ArrayList<Bus>();
-        try {
-            BusDriver driver = new BusDriver();
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
+			String busSql = "SELECT *" + " FROM bus " + " JOIN route ON bus.route_id = route.route_id "
+					+ " WHERE bus.date>=? and route.source = ? and route.destination=?";
+//          "SELECT * FROM bus WHERE driver_id IS NOT "
+//          + "NULL AND (date > ? AND source = ? AND destination = ?)";
+			statement = connection.prepareStatement(busSql);
+			statement.setDate(1, Date.valueOf(date));
+			statement.setString(2, source);
+			statement.setString(3, destination);
 
-            connection = DriverManager.getConnection(url, username, password);
+			ResultSet resultset = statement.executeQuery();
 
-            String busSql = "SELECT * FROM bus WHERE driver_id IS NOT "
-                    + "NULL AND (date > ? OR (date = ? AND departure_time > ?))";
-            statement = connection.prepareStatement(busSql);
-            statement.setDate(1, Date.valueOf(date));
-            statement.setDate(2, Date.valueOf(date));
-            statement.setTime(3, Time.valueOf(time));
+			while (resultset.next()) {
+				Bus bus = new Bus();
+				bus.setBusId(resultset.getInt("bus_id"));
+				int driverId = resultset.getInt("driver_id");
+				Administrator admin = new Administrator();
+				driver = admin.searchAssignedBus(bus.getBusId());
+//      driver.setAssignedBus(bus);
+				bus.setDriver(driver);
+				int routeId = resultset.getInt("route_id");
 
-            ResultSet resultset = statement.executeQuery();
+				String routeSql = "SELECT * FROM route " + "WHERE route_id = ?";
 
-            while (resultset.next()) {
-                bus.setBusId(resultset.getInt("bus_id"));
-                int driverId = resultset.getInt("driver_id");
-                Administrator admin = new Administrator();
-                driver = admin.searchAssignedBus(bus.getBusId());
-                driver.setAssignedBus(bus);
-                bus.setDriver(driver);
-                int routeId = resultset.getInt("route_id");
+				routeRecover = connection.prepareStatement(routeSql);
+				routeRecover.setInt(1, routeId);
 
-                String routeSql = "SELECT * FROM route " + "WHERE route_id = ?";
+				ResultSet routeSet = routeRecover.executeQuery();
 
-                routeRecover = connection.prepareStatement(routeSql);
-                routeRecover.setInt(1, routeId);
+				while (routeSet.next()) {
+					Route route = new Route();
+					route.setRouteId(routeSet.getInt("route_id"));
+					route.setSource(routeSet.getString("source"));
+					route.setDestination(routeSet.getString("destination"));
 
-                ResultSet routeSet = routeRecover.executeQuery();
+					bus.setRoute(route);
+				}
+//            driver is not added 
+//      bus.setDriver(resultset.getDrivere("bus_driver.first_name"));
+				bus.setDate(resultset.getDate("date").toLocalDate());
+				bus.setDepartureTime(resultset.getTime("departure_time").toLocalTime());
+				bus.setArrivalTime(resultset.getTime("arrival_time").toLocalTime());
+				bus.setBusTicketPrice(resultset.getDouble("bus_ticket_price"));
+				bus.setnumberOfSeats(resultset.getInt("number_of_seats"));
 
-                while (routeSet.next()) {
-                    Route route = new Route();
-                    route.setRouteId(routeSet.getInt("route_id"));
-                    route.setSource(routeSet.getString("source"));
-                    route.setDestination(routeSet.getString("destination"));
+				if (!this.isFullyBooked(bus.getBusId(), date, bus.getNumberOfSeats())) {
+					buses.add(bus);
+				}
+			}
 
-                    bus.setRoute(route);
-                }
+		} catch (SQLException exc) {
+			exc.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (routeRecover != null) {
+					routeRecover.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
-                bus.setDepartureTime(resultset.getTime("departure_time").toLocalTime());
-                bus.setArrivalTime(resultset.getTime("arrival_time").toLocalTime());
-                bus.setBusTicketPrice(resultset.getDouble("bus_ticket_price"));
-                bus.setnumberOfSeats(resultset.getInt("number_of_seats"));
-
-                if (!this.isFullyBooked(bus.getBusId(), date, bus.getNumberOfSeats())) {
-                    buses.add(bus);
-                }
-            }
-
-        } catch (SQLException exc) {
-            exc.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (routeRecover != null) {
-                    routeRecover.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return buses;
-    }
+		return buses;
+	}
 
 }
