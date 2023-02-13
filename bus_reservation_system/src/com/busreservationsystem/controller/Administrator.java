@@ -345,7 +345,7 @@ public void removeDriver(BusDriver driver) {
     }
 
     public void editDriverInfo(BusDriver driver, BusDriver newDriver) {
-        // tested no need for furthur testing
+         // tested no need for furthur testing
         Connection connection = null;
         PreparedStatement addressEdit = null;
         PreparedStatement driverEdit = null;
@@ -355,20 +355,30 @@ public void removeDriver(BusDriver driver) {
             String password = "Customer123$";
             connection = DriverManager.getConnection(url, username, password);
             connection.setAutoCommit(false);
-
-            String sql = "UPDATE address SET street_address = ?,"
+            
+            
+            String addressIdSql = "select address_id from bus_driver where bus_driver_id = ?";
+            PreparedStatement addressIdQuery = connection.prepareStatement(addressIdSql);
+            addressIdQuery.setInt(1,driver.getDriverId());
+            
+            ResultSet result = addressIdQuery.executeQuery();
+            if (result.next()){
+                int addressId = result.getInt("address_id");
+                
+                String sql = "UPDATE address SET street_address = ?,"
                     + "city = ?, region = ? " + "WHERE address_id = ?";
 
-            addressEdit = connection.prepareStatement(sql);
-            addressEdit.setString(1, newDriver.getAddress().getStreetAddress());
-            addressEdit.setString(2, newDriver.getAddress().getCity());
-            addressEdit.setString(3, newDriver.getAddress().getRegion());
-            addressEdit.setInt(4, driver.getAddress().getAddressId());
+                addressEdit = connection.prepareStatement(sql);
+                addressEdit.setString(1, newDriver.getAddress().getStreetAddress());
+                addressEdit.setString(2, newDriver.getAddress().getCity());
+                addressEdit.setString(3, newDriver.getAddress().getRegion());
+                addressEdit.setInt(4, addressId);
 
-            addressEdit.executeUpdate();
-
-            String driverSql = "UPDATE bus_driver SET first_name = ?, last_name = ?, "
-                    + "date_of_birth = ?, email = ?, phone_number = ? WHERE bus_driver_id = ?";
+                addressEdit.executeUpdate();
+                
+            }
+                String driverSql = "UPDATE bus_driver SET first_name = ?, last_name = ?, "
+                    + "date_of_birth = ?, email = ?, phone_number = ? ,gender = ? WHERE bus_driver_id = ?";
             driverEdit = connection.prepareStatement(driverSql);
             driverEdit.setString(1, newDriver.getFirstName());
             driverEdit.setString(2, newDriver.getLastName());
@@ -376,15 +386,16 @@ public void removeDriver(BusDriver driver) {
             driverEdit.setDate(3, date);
             driverEdit.setString(4, newDriver.getEmail());
             driverEdit.setString(5, newDriver.getPhoneNumber());
-            driverEdit.setInt(6, driver.getDriverId());
-
+            driverEdit.setString(6,newDriver.getGender());
+            driverEdit.setInt(7, driver.getDriverId());
             driverEdit.executeUpdate();
 
             connection.commit();
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
+        } 
+        finally {
             try {
                 if (connection != null) {
                     connection.close();
@@ -395,10 +406,22 @@ public void removeDriver(BusDriver driver) {
                 if (driverEdit != null) {
                     driverEdit.close();
                 }
-            } catch (SQLException e) {
+            }   
+            catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+    
+//            String sql = "UPDATE address SET street_address = ?,"
+//                    + "city = ?, region = ? " + "WHERE address_id = ?";
+//
+//            addressEdit = connection.prepareStatement(sql);
+//            addressEdit.setString(1, newDriver.getAddress().getStreetAddress());
+//            addressEdit.setString(2, newDriver.getAddress().getCity());
+//            addressEdit.setString(3, newDriver.getAddress().getRegion());
+//            addressEdit.setInt(4, driver.getAddress().getAddressId());
+//
+//            addressEdit.executeUpdate();
     }
     // beign edited 
     public void assignDriverToBus(int busId, int driverId) {
