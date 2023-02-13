@@ -260,8 +260,8 @@ public class adminController implements Initializable {
 			}
 		};
 
-		actionCol.setCellFactory(cellFactory);
-		tableid.getColumns().addAll(actionCol);
+		actionCol.setCellFactory(cellFactory);//cpy
+		tableid.getColumns().addAll(actionCol);//cpy
 		// initialize columns in table view
 		busnoid.setCellValueFactory(new PropertyValueFactory<>("busId"));
 		driverid.setCellValueFactory(
@@ -277,6 +277,7 @@ public class adminController implements Initializable {
 
 		// make the table editable
 		tableid.setEditable(true);
+                // cpy
 		// the try block should be updated
 		try {
 			refreshTable();

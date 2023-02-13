@@ -5,6 +5,7 @@ import com.busreservationsystem.controller.Administrator;
 import com.busreservationsystem.model.Bus;
 import com.busreservationsystem.model.BusDriver;
 import com.busreservationsystem.model.Route;
+import java.io.IOException;
 
 import java.net.URL;
 import java.sql.Connection;
@@ -23,15 +24,26 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -70,10 +82,20 @@ public class DriverController implements Initializable {
 	@FXML
 	private TextField StreetId;
 	
-    @FXML
-    private TextField genderTextFieldId;
-
-	@FXML
+//        @FXML
+//        private TextField genderTextFieldId;
+        
+    
+        @FXML
+        private ToggleGroup gender;
+        
+        @FXML
+        private RadioButton male;
+        
+        @FXML
+        private RadioButton female;
+	
+        @FXML
 	private TableColumn<BusDriver, String> cityId;
 
 	@FXML
@@ -114,10 +136,21 @@ public class DriverController implements Initializable {
 		address.setStreetAddress(StreetId.getText());
 		address.setCity(CityId.getText());
 		address.setRegion(RegionId.getText());
-
+                
+                
+                String genderValue = "";
+                ToggleButton selected = (ToggleButton) gender.getSelectedToggle();
+                if (selected.getText().equals("male")){
+                    genderValue = "M";
+                }
+                else if (selected.getText().equals("female")){
+                    genderValue = "F";
+                }
+                
+                driver.setGender(genderValue);
 		driver.setFirstName(FirstNameId.getText());
 		driver.setLastName(LastNameId.getText());
-		driver.setGender(genderTextFieldId.getText());
+//		driver.setGender(genderTextFieldId.getText());
 		driver.setDateOfBirth(DateId.getValue());
 		driver.setEmail(EmailId.getText());
 		driver.setPhoneNumber(PhoneNumberId.getText());
@@ -216,7 +249,6 @@ public class DriverController implements Initializable {
         
         tableId.setItems(data);
 		
-		// add gender and try it again 
 	}
 
 	/**
@@ -224,7 +256,80 @@ public class DriverController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		// initialize columns in table view
+		// create columns with delete and edit buttons for each row
+		Administrator admin = new Administrator();
+		TableColumn<BusDriver, Void> actionCol = new TableColumn<>("Action");
+		Callback<TableColumn<BusDriver, Void>, TableCell<BusDriver, Void>> cellFactory = new Callback<TableColumn<BusDriver, Void>, TableCell<BusDriver, Void>>() {
+			@Override
+			public TableCell<BusDriver, Void> call(final TableColumn<BusDriver, Void> param) {
+				final TableCell<BusDriver, Void> cell = new TableCell<BusDriver, Void>() {
+					private final Button deleteButton = new Button("Delete");
+					private final Button editButton = new Button("Edit");
+
+					{
+						deleteButton.setOnAction((ActionEvent event) -> {
+							BusDriver data = getTableView().getItems().get(getIndex());
+							// call the delete method
+							admin.removeDriver(data);
+							getTableView().getItems().remove(data);
+							refreshTable();
+						});
+						editButton.setOnAction((ActionEvent event) -> {
+							BusDriver data = getTableView().getItems().get(getIndex());
+							
+							FXMLLoader loader = new FXMLLoader(getClass().getResource("editDriver.fxml"));
+							
+							  Parent root;
+							    try {
+							        root = loader.load();
+							    } catch (IOException e) {
+							        e.printStackTrace();
+							        return;
+							    }
+							    
+							editDriverController editController = loader.getController();
+							
+						    Stage stage = new Stage();
+						    stage.setScene(new Scene(root));
+						    stage.showAndWait();
+						    
+						    
+					        BusDriver updatedDriver = editController.getUpdateDriver();
+					        
+					        updatedDriver.setAssignedBus(data.getAssignedBus());
+					        updatedDriver.getAddress().setAddressId(data.getAddress().getAddressId());
+							// call the edit method
+							admin.editDriverInfo(data, updatedDriver); 
+							
+
+							/*int selectedIndex = getTableRow().getIndex();
+							tableid.getItems().set(selectedIndex, updatedBus);*/
+							refreshTable();
+						});
+					}
+
+					@Override
+					public void updateItem(Void item, boolean empty) {
+						super.updateItem(item, empty);
+						if (empty) {
+							setGraphic(null);
+						} else {
+							HBox buttons = new HBox();
+							buttons.getChildren().addAll(editButton, deleteButton);
+							setGraphic(buttons);
+						}
+					}
+				};
+				return cell;
+			}
+		};
+
+		actionCol.setCellFactory(cellFactory);//cpy
+		tableId.getColumns().addAll(actionCol);//cpy
+
+
+
+                // initialize columns in table view
 		idid.setCellValueFactory(new PropertyValueFactory<>("driverId"));
 		streetAddressId.setCellValueFactory(
 				cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getStreetAddress()));

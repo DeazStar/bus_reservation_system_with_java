@@ -168,6 +168,87 @@ public class Administrator implements FileStorage {
             }
         }
     }
+public void removeDriver(BusDriver driver) {
+        // tested no furture testing required
+        Connection connection = null;
+        PreparedStatement busEdit = null;
+        PreparedStatement addressEdit = null;
+        PreparedStatement driverEdit = null;
+        try {
+            String url = "jdbc:mysql://localhost:3306/busreservation_db";
+            String username = "customer";
+            String password = "Customer123$";
+            connection = DriverManager.getConnection(url, username, password);
+            connection.setAutoCommit(false);
+
+            //SET FOREIGN KEY_CHECKS=0
+            Statement disableFKCheck = connection.createStatement();
+            disableFKCheck.execute("SET FOREIGN_KEY_CHECKS=0");
+            String addressIdSql = "SELECT address_id FROM bus_driver WHERE bus_driver_id = ?";
+            
+            PreparedStatement addressIdQuery = connection.prepareStatement(addressIdSql);
+            
+            addressIdQuery.setInt(1, driver.getDriverId());
+            System.out.println(driver.getDriverId());
+            
+            ResultSet result = addressIdQuery.executeQuery();
+            
+            
+            if (result.next()) {
+                int addressId = result.getInt("address_id");
+                System.out.println(addressId);
+                String addressSql = "DELETE from address WHERE address_id = ?";
+                addressEdit = connection.prepareStatement(addressSql);
+                addressEdit.setInt(1, addressId);
+                addressEdit.executeUpdate();	
+            }
+            
+            String sql = "DELETE FROM bus_driver WHERE bus_driver_id = ?";
+            driverEdit = connection.prepareStatement(sql);
+            driverEdit.setInt(1, driver.getDriverId());
+            driverEdit.executeUpdate();
+            
+           
+            
+            String busSql = "UPDATE bus SET driver_id = null "
+                    + "WHERE driver_id = ?";
+            busEdit = connection.prepareStatement(busSql);
+            busEdit.setInt(1,driver.getDriverId());
+            busEdit.executeUpdate();
+            //SET FOREIGN_KEY_CHECKS=1;
+            Statement enableFKCheck = connection.createStatement();
+            enableFKCheck.execute("SET FOREIGN_KEY_CHECKS=1");
+
+            connection.commit();
+
+        } catch (SQLException e) {
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (driverEdit != null) {
+                    driverEdit.close();
+                }
+                if (addressEdit != null) {
+                    addressEdit.close();
+                }
+                if (busEdit != null) {
+                    busEdit.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public Bus searchBus(int busId) {
         // implementation of searchBus method
