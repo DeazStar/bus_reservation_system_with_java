@@ -11,7 +11,7 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 import com.busreservationsystem.interfaces.FileStorage;
 import java.math.*;
 
-public class Administrator implements FileStorage {
+public class Administrator {
 
     private Bus bus; // new attribute
     private BusDriver driver; // new attribute
@@ -400,8 +400,8 @@ public void removeDriver(BusDriver driver) {
             }
         }
     }
-
-    public void assignDriverToBus(Bus bus, BusDriver driver) {
+    // beign edited 
+    public void assignDriverToBus(int busId, int driverId) {
         // tested no furture testing required
         Connection connection = null;
         PreparedStatement driverEdit = null;
@@ -414,26 +414,28 @@ public void removeDriver(BusDriver driver) {
             connection = DriverManager.getConnection(url, username, password);
             connection.setAutoCommit(false);
 
-            String sql = "UPDATE bus_driver SET assigned_bus = ? " + "WHERE bus_driver_id = ?";
-
-            driverEdit = connection.prepareStatement(sql);
-            driverEdit.setInt(1, bus.getBusId());
-            driverEdit.setInt(2, driver.getDriverId());
-
-            driverEdit.executeUpdate();
-
             String busSql = "UPDATE bus SET driver_id = ? WHERE bus_id = ?";
-
             busEdit = connection.prepareStatement(busSql);
-            busEdit.setInt(1, driver.getDriverId());
-            busEdit.setInt(2, bus.getBusId());
-
+            busEdit.setInt(1, driverId);
+            busEdit.setInt(2, busId);
             busEdit.executeUpdate();
 
-            connection.commit();
+            String sql = "UPDATE bus_driver SET assigned_bus = ? WHERE bus_driver_id = ?";
+            driverEdit = connection.prepareStatement(sql);
+            driverEdit.setInt(1, busId);
+            driverEdit.setInt(2, driverId);
+            driverEdit.executeUpdate();
 
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         } finally {
             try {
                 if (connection != null) {
@@ -449,7 +451,6 @@ public void removeDriver(BusDriver driver) {
                 e.printStackTrace();
             }
         }
-
     }
 
     public BusDriver searchDriver(int driverId) {
@@ -655,13 +656,12 @@ public void removeDriver(BusDriver driver) {
         }
     }
 
-    @Override
-    public void store() {
+    public int store() {
         // testd no need for furture testing
         Connection connection = null;
         PreparedStatement busInsert = null;
         PreparedStatement routeInsert = null;
-
+        int busId = 0;
         try {
             String url = "jdbc:mysql://localhost:3306/busreservation_db";
             String username = "customer";
@@ -705,7 +705,8 @@ public void removeDriver(BusDriver driver) {
 
             ResultSet busKey = busInsert.getGeneratedKeys();
             busKey.next();
-            bus.setBusId(busKey.getInt(1));
+            busId = busKey.getInt(1);
+            bus.setBusId(busId);
             // commit the transaction
 
             connection.commit();
@@ -729,7 +730,9 @@ public void removeDriver(BusDriver driver) {
                 exc.printStackTrace();
             }
         }
-
+        
+        
+        return busId;
     }
 
     public void saveDriver() {
