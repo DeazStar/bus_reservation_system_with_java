@@ -671,8 +671,9 @@ public class Administrator implements FileStorage {
                     Statement.RETURN_GENERATED_KEYS);
 
             driverInsert = connection.prepareStatement(
-                    "INSERT INTO bus_driver (" + "first_name, last_name, date_of_birth, email, phone_number, "
-                    + "address_id, assigned_bus) VALUES (?, ?, " + "?, ?, ?, ?, ?)",
+                    "INSERT INTO bus_driver (first_name, last_name, "
+                    + "gender, date_of_birth, email, phone_number, address_id, "
+                    + "assigned_bus) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
 
             // insert the address info
@@ -689,12 +690,13 @@ public class Administrator implements FileStorage {
                 // insert the driver info
                 driverInsert.setString(1, driver.getFirstName());
                 driverInsert.setString(2, driver.getLastName());
+                driverInsert.setString(3, driver.getGender());
                 Date date = java.sql.Date.valueOf(driver.getDateOfBirth());
-                driverInsert.setDate(3, date);
-                driverInsert.setString(4, driver.getEmail());
-                driverInsert.setString(5, driver.getPhoneNumber());
-                driverInsert.setInt(6, address_id);
-                driverInsert.setObject(7, null, Types.INTEGER);
+                driverInsert.setDate(4, date);
+                driverInsert.setString(5, driver.getEmail());
+                driverInsert.setString(6, driver.getPhoneNumber());
+                driverInsert.setInt(7, address_id);
+                driverInsert.setObject(8, null, Types.INTEGER);
                 driverInsert.executeUpdate();
 
                 ResultSet driverKey = driverInsert.getGeneratedKeys();
