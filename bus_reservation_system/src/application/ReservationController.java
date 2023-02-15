@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -21,16 +23,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import com.busreservationsystem.model.*;
+import com.busreservationsystem.model.Route;
 import com.busreservationsystem.user.Customer;
+import com.busreservationsystem.model.Bus;
+import com.busreservationsystem.model.BusDriver;
 import com.busreservationsystem.controller.*;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.*;
+
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -39,12 +46,8 @@ import javafx.util.Callback;
 
 
 public class ReservationController implements Initializable {
-
-	   
-	  @FXML
-	 private DatePicker datePIck;
-
-	     @FXML
+    
+     @FXML
     private TableColumn<Bus, LocalTime> arrive;
 
     @FXML
@@ -54,7 +57,7 @@ public class ReservationController implements Initializable {
     private TableColumn<Bus, LocalDate> date;
 
     @FXML
-    private TableColumn<Bus, LocalDate> dateId;
+    private DatePicker dateId;
 
     @FXML
     private TableColumn<Bus, LocalTime> departure;
@@ -86,6 +89,8 @@ public class ReservationController implements Initializable {
     @FXML
     private ComboBox<String> to;
     
+    private Customer customer;
+    
     ResultSet resultSet;
     PreparedStatement pst;
 
@@ -93,6 +98,14 @@ public class ReservationController implements Initializable {
     void search(ActionEvent event) {
         loadData();
         
+    }
+    
+    public void setCustomer(Customer customer) {
+    	this.customer = customer;
+    }
+    
+    public Customer getCustomer() {
+    	return this.customer;
     }
     
     public int bookSeat(int customerId, int busId) {
@@ -152,25 +165,32 @@ public class ReservationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+    	//LoginController loginController = new LoginController();
 
-    	Parent root;
+    	/*Parent root;
     	try {
     	    root = loader.load();
     	} catch (IOException e) {
     	    e.printStackTrace();
     	    return;
     	}
-
-    	LoginController loginController = loader.getController();
+*/
+ 
 
     	// show the login window
-    	Stage stage = new Stage();
-    	stage.setScene(new Scene(root));
-    	stage.showAndWait();
-
+    
     	// get the customer object
-    	Customer customer = loginController.getCustomer();
+    	//Customer customer = loginController.getCustomer();
+    	
+    	//System.out.println(this.customer);
+    	
+    	
+    	//persists to open a new page so if the customer click the x button the program will exitd==Lo	
+    	/*if (this.customer == null) {
+    		Platform.exit();
+    		System.exit(0);
+    	}*/
+    	Customer customer = StaticCustomer.customer;
     	
     	System.out.println(customer);
     	Reservation admin = new Reservation();
@@ -186,7 +206,21 @@ public class ReservationController implements Initializable {
                   Bus data = getTableView().getItems().get(getIndex());
                   int seatNumber = bookSeat(customer.getCustomerId(), data.getBusId());
                   System.out.println(seatNumber);
-                  customer.setReservation(seatNumber, data, data.getBusTicketPrice());        
+                  try {
+                	  customer.setReservation(seatNumber, data, data.getBusTicketPrice());        
+                  } catch(Exception e) {
+          			Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, e);
+        			Alert alert = new Alert(Alert.AlertType.ERROR);
+        			alert.setTitle("Error");
+        			alert.setHeaderText("An error occurred while booking");
+        			alert.setContentText(
+        					"could not reserve a seat in the bus");
+        			alert.showAndWait();
+                  }
+          		  Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        		  alert.setContentText("Booked  Succesfuly");
+        		  alert.showAndWait();
+                  
                 });
               }
 
@@ -262,17 +296,10 @@ public class ReservationController implements Initializable {
         data.addAll(reserver.showAvailableBus(Date, sour,dest));
         tableId.setItems(data);
     }
-	private Stage stage;
-	private Scene scene;
-
     
-    @FXML
-    public void ToReservation(ActionEvent event) throws IOException {
-   	  Parent root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
-   	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-   	  scene = new Scene(root);
-   	  stage.setScene(scene);
-   	  stage.show();
-   }
+
+	
+    
+   
     
 }

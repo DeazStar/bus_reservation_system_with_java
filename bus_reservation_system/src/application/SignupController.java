@@ -83,19 +83,11 @@ public class SignupController {
 	
     @FXML
     void tologin(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {
-
-   
-    	FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));	
-		root = loader.load();
-		
-		LoginController scene1Controller = loader.getController();
-		scene1Controller.login(event);
-		
-		//root = FXMLLoader.load(getClass().getResource("Scene2.fxml"));
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
+    	  root = FXMLLoader.load(getClass().getResource("signup.fxml"));
+    	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+    	  scene = new Scene(root);
+    	  stage.setScene(scene);
+    	  stage.show();
 		
     }
     @FXML
@@ -129,6 +121,17 @@ public class SignupController {
     	managment.signup(customer, username.getText(), password.getText());
     	
     	managment.store();
+    	
+  	  try {
+		root = FXMLLoader.load(getClass().getResource("signup.fxml"));
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+  	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+  	  scene = new Scene(root);
+  	  stage.setScene(scene);
+  	  stage.show();
     }
 	
 }

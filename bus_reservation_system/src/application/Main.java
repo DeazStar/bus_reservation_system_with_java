@@ -5,7 +5,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -30,18 +29,10 @@ public class Main extends Application
             Scene scene = new Scene(parent);
             
             primaryStage.setTitle("AFRI BUS");
-           
-            
-            primaryStage.setScene(scene);
-           
             primaryStage.setResizable(false);
-//	            primaryStage.initStyle(StageStyle.TRANSPARENT);
-    //			primaryStage.initStyle(StageStyle.UNDECORATED);   
-
-            
+            primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException ex) 
-       
         {
         	ex.printStackTrace();
         }
@@ -62,11 +53,14 @@ public class Main extends Application
  }
  @FXML
  public void toCustomerlogin(ActionEvent event) throws IOException {
-  root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
+	
+  root = FXMLLoader.load(getClass().getResource("login.fxml"));
   stage = (Stage)((Node)event.getSource()).getScene().getWindow();
   scene = new Scene(root);
   stage.setScene(scene);
   stage.show();
+  
+ 
  }
  
  public void cancel(ActionEvent e)
