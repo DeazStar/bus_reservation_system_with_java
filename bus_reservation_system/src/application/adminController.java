@@ -37,6 +37,9 @@ import javax.swing.JOptionPane;
 
 import com.busreservationsystem.model.*;
 import com.busreservationsystem.model.Route;
+
+import com.busreservationsystem.Exception.*;
+
 import com.busreservationsystem.model.Bus;
 import com.busreservationsystem.model.BusDriver;
 import com.busreservationsystem.controller.Administrator;
@@ -118,8 +121,24 @@ public class adminController implements Initializable {
 		bus.setDriver(null);
 		bus.setRoute(route);
 		bus.setDate(dateId.getValue());
-		bus.setDepartureTime(LocalTime.parse(deptime_TextField.getText(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-		bus.setArrivalTime(LocalTime.parse(arrivaltime_TextField.getText(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+		
+		try {
+			  validateTime(deptime_TextField.getText());
+			  
+			  bus.setDepartureTime(LocalTime.parse(deptime_TextField.getText(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+			  
+			  validateTime(arrivaltime_TextField.getText());
+			  
+				bus.setArrivalTime(LocalTime.parse(arrivaltime_TextField.getText(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+
+			} 
+		catch (InvalidTimeFormatException e) 
+			{
+				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+				alert.setContentText("Invalid time format. Time should be in HH:mm:ss format.");
+				alert.showAndWait();
+			}
+		
 		bus.setBusTicketPrice(Double.parseDouble(price_TextField.getText()));
 		bus.setnumberOfSeats(Integer.parseInt(totald_TextField.getText()));
 
@@ -136,6 +155,13 @@ public class adminController implements Initializable {
 
 	}
 
+	static void validateTime(String time) throws InvalidTimeFormatException {
+		  // Check if the input time is in the correct format
+		  if (!time.matches("\\d{2}:\\d{2}:\\d{2}")) {
+		    throw new InvalidTimeFormatException();
+		  }
+		}
+	
 	@FXML
 	private void refreshTable() {
 		// create an observablelist to store data

@@ -23,9 +23,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import com.busreservationsystem.user.Customer;
+import com.busreservationsystem.user.CustomerManagment;
+
 public class LoginController {
 
-
+	private Stage stage;
+	private Scene scene;
+	private Parent root;
 	@FXML
     private Button cancelid;
 
@@ -54,7 +59,7 @@ public class LoginController {
 		stage.close();
 	}
 	
-	public void login(ActionEvent event) throws SQLException
+	public Customer login(ActionEvent event) throws SQLException
 	{
 		if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false)
 		{
@@ -70,6 +75,30 @@ public class LoginController {
 		{
 			labelid.setText("Please enter username and password");
 		}
+		
+		CustomerManagment cmg = new CustomerManagment();
+		Customer customer = cmg.login(nameid.getText(), passid.getText());
+		
+		if (customer == null) {
+			labelid.setText("Please enter correct username and password");
+		} else {
+			try {
+				root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+			  scene = new Scene(root);
+			  stage.setScene(scene);
+			  stage.show();
+			  return customer;
+		}
+		
+		return customer;
+		
+		
+		
 }
 	
 
@@ -82,9 +111,6 @@ public class LoginController {
 		
 }
 		
-	private Stage stage;
-	private Scene scene;
-	private Parent root;
 
 
  @FXML

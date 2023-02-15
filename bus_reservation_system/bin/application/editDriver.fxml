@@ -8,24 +8,24 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="444.0" prefWidth="662.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.editDriverController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="444.0" prefWidth="662.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.EditDriverController">
    <children>
-      <TextField fx:id="firstNameId" layoutX="48.0" layoutY="90.0" promptText="firstName" />
-      <TextField fx:id="streetId" layoutX="454.0" layoutY="227.0" promptText="street" />
-      <TextField fx:id="phoneId" layoutX="49.0" layoutY="151.0" promptText="Phone number" />
-      <TextField fx:id="emailId" layoutX="454.0" layoutY="90.0" promptText="email" />
-      <TextField fx:id="cityId" layoutX="454.0" layoutY="191.0" promptText="city" />
-      <TextField fx:id="lastNameId" layoutX="246.0" layoutY="91.0" promptText="lastName" />
-      <TextField fx:id="regionId" layoutX="454.0" layoutY="272.0" promptText="region" />
-      <Label layoutX="378.0" layoutY="231.0" text="Address:" textFill="WHITE" />
-      <DatePicker fx:id="dateId" layoutX="243.0" layoutY="151.0" promptText="date of birth" />
-      <Label layoutX="113.0" layoutY="231.0" text="Gender:" />
-      <RadioButton fx:id="male" layoutX="175.0" layoutY="222.0" mnemonicParsing="false" text="male" textFill="WHITE">
+      <TextField fx:id="firstNameId" layoutX="48.0" layoutY="59.0" promptText="firstName" />
+      <TextField fx:id="streetId" layoutX="454.0" layoutY="196.0" promptText="street" />
+      <TextField fx:id="phoneId" layoutX="49.0" layoutY="120.0" promptText="Phone number" />
+      <TextField fx:id="emailId" layoutX="454.0" layoutY="59.0" promptText="email" />
+      <TextField fx:id="cityId" layoutX="454.0" layoutY="160.0" promptText="city" />
+      <TextField fx:id="lastNameId" layoutX="256.0" layoutY="59.0" promptText="lastName" />
+      <TextField fx:id="regionId" layoutX="454.0" layoutY="241.0" promptText="region" />
+      <Label layoutX="378.0" layoutY="200.0" text="Address:" />
+      <DatePicker fx:id="dateId" layoutX="243.0" layoutY="120.0" promptText="date of birth" />
+      <Label layoutX="113.0" layoutY="200.0" text="Gender:" />
+      <RadioButton fx:id="male" layoutX="175.0" layoutY="191.0" mnemonicParsing="false" text="male">
          <toggleGroup>
             <ToggleGroup fx:id="gender" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="female" layoutX="175.0" layoutY="244.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="58.0" text="female" textFill="WHITE" toggleGroup="$gender" />
-      <Button fx:id="saveId" layoutX="293.0" layoutY="354.0" mnemonicParsing="false" onAction="#handleSaveButtonHandle" prefHeight="32.0" prefWidth="80.0" text="Save" />
+      <RadioButton fx:id="female" layoutX="175.0" layoutY="213.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="58.0" text="female" toggleGroup="$gender" />
+      <Button fx:id="saveId" layoutX="293.0" layoutY="350.0" mnemonicParsing="false" onAction="#handleSaveButtonHandle" text="Save" />
    </children>
 </AnchorPane>
