@@ -97,6 +97,15 @@ public class SignupController {
     @FXML
     void signup(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
     	
+		if (firstname.getText().isBlank() == true || password.getText().isBlank() == true || username.getText().isBlank() == true)
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+		    alert.setContentText("Please Enter Your Full Information");
+			alert.showAndWait();
+			return;
+		}
+
+    	
     	Customer customer = new Customer();
     	customer.setFirstName(firstname.getText());
     	customer.setLastName(lastid.getText());
@@ -128,35 +137,29 @@ public class SignupController {
     	managment.store();
     	
   	  try {
-		root = FXMLLoader.load(getClass().getResource("signup.fxml"));
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-  	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-  	  scene = new Scene(root);
-  	  stage.setScene(scene);
-  	  stage.show();
-  	  
-  	Alert alert = new Alert(AlertType.CONFIRMATION);
-  	alert.setTitle("Signup Sucessfull");
+//		root = FXMLLoader.load(getClass().getResource("signup.fxml"));
+ 
+  		Alert alert = new Alert(AlertType.CONFIRMATION);
+	  	alert.setTitle("Signup Sucessfull");
 
-  	Optional<ButtonType> result = alert.showAndWait();
-  	if (result.get() == ButtonType.OK)
-  	{
- 	   // user clicked ok button
-  	  root = FXMLLoader.load(getClass().getResource("login.fxml"));
-	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-	  scene = new Scene(root);
-	  stage.setScene(scene);
-	  stage.show();
-	
-  	    
-  	} 
-  	else {
-  	    // user clicked Cancel button or closed the dialog
-  	}
-  	
+	  	Optional<ButtonType> result = alert.showAndWait();
+	  	if (result.get() == ButtonType.OK)
+	  	{
+	 	   // user clicked ok button
+	  	  root = FXMLLoader.load(getClass().getResource("login.fxml"));
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  stage.setScene(scene);
+		  stage.show();   
+	  	} 
+	  	
+  	  }	 
+  	  catch (IOException e) 
+  	  {
+		e.printStackTrace();
+    	}
+  		  
+
     }
 	
 }
