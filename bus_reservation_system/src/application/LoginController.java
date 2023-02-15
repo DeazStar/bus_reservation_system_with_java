@@ -25,9 +25,6 @@ import javafx.stage.Stage;
 
 public class LoginController {
 
-	private Stage stage;
-	private Scene scene;
-	private Parent root;
 
 	@FXML
     private Button cancelid;
@@ -47,6 +44,8 @@ public class LoginController {
     @FXML
     private Button signupid;
 
+    @FXML
+    private Button back;
     
  		
 	public void cancel(ActionEvent e)
@@ -83,6 +82,9 @@ public class LoginController {
 		
 }
 		
+	private Stage stage;
+	private Scene scene;
+	private Parent root;
 
 
  @FXML
@@ -102,4 +104,12 @@ public class LoginController {
   stage.setScene(scene);
   stage.show();
  }
+ @FXML
+ public void ToWelcome(ActionEvent event) throws IOException {
+	  Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
+	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+	  scene = new Scene(root);
+	  stage.setScene(scene);
+	  stage.show();
+}
 }

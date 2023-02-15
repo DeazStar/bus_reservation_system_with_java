@@ -21,7 +21,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,7 +56,7 @@ public class DriverController implements Initializable {
 	private Button AddDriverId;
 
 	@FXML
-	private TableColumn<BusDriver, Integer> BusId;
+	private TableColumn<Bus, Integer> BusId;
 
 	@FXML
 	private TextField CityId;
@@ -288,7 +287,7 @@ public class DriverController implements Initializable {
 							        return;
 							    }
 							    
-							EditDriverController editController = loader.getController();
+							editDriverController editController = loader.getController();
 							
 						    Stage stage = new Stage();
 						    stage.setScene(new Scene(root));
@@ -343,11 +342,6 @@ public class DriverController implements Initializable {
 		phoneNumberId.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
 		dobID.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
 		genderId.setCellValueFactory(new PropertyValueFactory<>("gender"));
-		BusId.setCellValueFactory(cellData -> {
-		    Bus assignedBus = cellData.getValue().getAssignedBus();
-		    int busId = assignedBus != null ? assignedBus.getBusId() : 0;
-		    return new SimpleIntegerProperty(busId).asObject();
-		});
 		try {
 			refreshTable();
 		} catch (NullPointerException e) {

@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-public class EditDriverController implements Initializable{
+public class editDriverController implements Initializable{
 
     @FXML
     private TextField cityId;

@@ -1,21 +1,34 @@
 package application;
 	
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+
 import java.io.IOException;
 
 public class Main extends Application 
 {
-	 
+	@FXML
+    private Button cancelid;
+
+
+
+	 public static void main(String[] args) {
+	        launch(args);
+	    } 
 	@Override
     public void start(Stage primaryStage) {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("reservation.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("welcome.fxml"));
             Scene scene = new Scene(parent);
-            primaryStage.setTitle("SELAM BUS");
+            
+            primaryStage.setTitle("AFRI BUS");
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException ex) 
@@ -23,12 +36,33 @@ public class Main extends Application
         	ex.printStackTrace();
         }
     }
+	
+	private Stage stage;
+	private Scene scene;
+	private Parent root;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
+
+ @FXML
+ public void toAdminlogin(ActionEvent event) throws IOException {
+  root = FXMLLoader.load(getClass().getResource("Adminlogin.fxml"));
+  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+  scene = new Scene(root);
+  stage.setScene(scene);
+  stage.show();
+ }
+ @FXML
+ public void toCustomerlogin(ActionEvent event) throws IOException {
+  root = FXMLLoader.load(getClass().getResource("Customerlogin.fxml"));
+  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+  scene = new Scene(root);
+  stage.setScene(scene);
+  stage.show();
+ }
+ 
+ public void cancel(ActionEvent e)
+	{
+		Stage stage= (Stage) cancelid.getScene().getWindow();
+		stage.close();
+	}
     
 }

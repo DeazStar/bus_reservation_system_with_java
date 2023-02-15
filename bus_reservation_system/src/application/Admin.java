@@ -11,7 +11,7 @@ public class Admin extends Application {
 	@Override
 	public void start(Stage stage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("driver.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("Adminlogin.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
 			
