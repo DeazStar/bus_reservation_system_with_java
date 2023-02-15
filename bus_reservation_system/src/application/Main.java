@@ -25,7 +25,7 @@ public class Main extends Application
 	@Override
     public void start(Stage primaryStage) {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("admin.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("adminlogin.fxml"));
             Scene scene = new Scene(parent);
             
             primaryStage.setTitle("AFRI BUS");
@@ -44,7 +44,7 @@ public class Main extends Application
 
  @FXML
  public void toAdminlogin(ActionEvent event) throws IOException {
-  root = FXMLLoader.load(getClass().getResource("Adminlogin.fxml"));
+  root = FXMLLoader.load(getClass().getResource("adminlogin.fxml"));
   stage = (Stage)((Node)event.getSource()).getScene().getWindow();
   scene = new Scene(root);
   stage.setScene(scene);
