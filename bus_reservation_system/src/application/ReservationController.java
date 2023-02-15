@@ -31,6 +31,8 @@ import java.time.format.DateTimeFormatter;
 import java.sql.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -147,6 +149,70 @@ public class ReservationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+    	
+    	Reservation admin = new Reservation();
+        TableColumn<Bus, Void> actionCol = new TableColumn<>("Action");
+        Callback<TableColumn<Bus, Void>, TableCell<Bus, Void>> cellFactory = new Callback<TableColumn<Bus, Void>, TableCell<Bus, Void>>() {
+          @Override
+          public TableCell<Bus, Void> call(final TableColumn<Bus, Void> param) {
+            final TableCell<Bus, Void> cell = new TableCell<Bus, Void>() {
+              private final Button editButton = new Button("Book");
+
+              {
+                editButton.setOnAction((ActionEvent event) -> {
+//                  Bus data = getTableView().getItems().get(getIndex());
+//                  
+//                  FXMLLoader loader = new FXMLLoader(getClass().getResource("editBus.fxml"));
+//                  
+//                    Parent root;
+//                      try {
+//                          root = loader.load();
+//                      } catch (IOException e) {
+//                          e.printStackTrace();
+//                          return;
+//                      }
+//                      
+//                  EditBusController editController = loader.getController();
+//                  
+//                    Stage stage = new Stage();
+//                    stage.setScene(new Scene(root));
+//                    stage.showAndWait();
+//                    
+//                    
+//                      Bus updatedBus = editController.geteUpdateBus();
+//                      
+//                      updatedBus.setDriver(data.getDrivere());
+//                      updatedBus.getRoute().setRouteId(data.getRoute().getRouteId());
+//                  // call the edit method
+//                  admin.editBus(data, updatedBus); 
+//                  
+
+                  /*int selectedIndex = getTableRow().getIndex();
+                  tableid.getItems().set(selectedIndex, updatedBus);*/
+            
+                });
+              }
+
+              @Override
+              public void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                  setGraphic(null);
+                } else {
+                  HBox buttons = new HBox();
+                  buttons.getChildren().addAll(editButton);
+                  setGraphic(buttons);
+                }
+              }
+            };
+            return cell;
+          }
+        };
+        
+
+        actionCol.setCellFactory(cellFactory);//cpy
+        tableId.getColumns().addAll(actionCol);//cpy
+    	
         connect();
         
     busId.setCellValueFactory(new PropertyValueFactory<>("busId"));
