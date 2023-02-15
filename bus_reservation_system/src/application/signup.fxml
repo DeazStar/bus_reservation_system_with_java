@@ -35,11 +35,11 @@
             <Font name="Berlin Sans FB" size="14.0" />
          </font>
       </PasswordField>
-      <Button layoutX="511.0" layoutY="14.0" mnemonicParsing="false" onAction="#tologin" prefHeight="27.0" prefWidth="68.0" style="-fx-background-color: #034372;" text="Log in" textFill="#24fdff">
+      <Button layoutX="511.0" layoutY="14.0" mnemonicParsing="false" onAction="#tologin" prefHeight="27.0" prefWidth="68.0" style="-fx-background-color: #034372;" text="Log in" textFill="#b7ffff">
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font></Button>
-      <Button layoutX="329.0" layoutY="397.0" mnemonicParsing="false" onAction="#signup" prefHeight="19.0" prefWidth="80.0" style="-fx-background-color: #034372;" text="Sign up " textFill="#6cf5e1">
+      <Button layoutX="329.0" layoutY="397.0" mnemonicParsing="false" onAction="#signup" prefHeight="19.0" prefWidth="80.0" style="-fx-background-color: #034372;" text="Sign up " textFill="#c3e2dd">
          <font>
             <Font name="Agency FB Bold" size="15.0" />
          </font>
@@ -74,7 +74,7 @@
             <Font name="Berlin Sans FB" size="14.0" />
          </font>
       </TextField>
-      <Text fill="#d40000" layoutX="69.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\@selambus.com" />
+      <Text fill="#d40000" layoutX="75.0" layoutY="197.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\@Afribus.com" />
       <TextField fx:id="region" layoutX="408.0" layoutY="218.0" prefHeight="25.0" prefWidth="130.0" promptText="region">
          <font>
             <Font name="Berlin Sans FB" size="14.0" />

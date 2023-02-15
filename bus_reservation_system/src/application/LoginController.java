@@ -59,6 +59,13 @@ public class LoginController {
 	}
 	
 	public void login(ActionEvent event) throws SQLException {
+		
+		if (nameid.getText().isBlank() == true || passid.getText().isBlank() == true)
+		{
+			labelid.setText("Please enter username and password");
+			return;
+		}
+		
 		while (StaticCustomer.customer == null)
 		{
 			if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false)
@@ -125,17 +132,14 @@ public class LoginController {
   stage.show();
  }
  
- public void toReservation() throws IOException {
-	    // Load the reservation screen
-	    FXMLLoader loader = new FXMLLoader(getClass().getResource("reservation.fxml"));
-	    Parent root = loader.load();
-	    
-	    // Show the reservation screen
-	    Scene scene = new Scene(root);
-	    Stage stage = new Stage();
-	    stage.setScene(scene);
-	    stage.show();
-	}
+ public void toReservation(ActionEvent event) throws IOException 
+ 	  {
+	   	  Parent root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
+	   	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+	   	  scene = new Scene(root);
+	   	  stage.setScene(scene);
+	   	  stage.show();
+	   }
 
  @FXML
  public void toadmin(ActionEvent event) throws IOException {

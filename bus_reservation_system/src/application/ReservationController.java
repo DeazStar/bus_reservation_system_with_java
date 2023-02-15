@@ -57,8 +57,6 @@ public class ReservationController implements Initializable {
     @FXML
     private TableColumn<Bus, LocalDate> date;
 
-    @FXML
-    private DatePicker dateId;
 
     @FXML
     private TableColumn<Bus, LocalTime> departure;
@@ -90,7 +88,41 @@ public class ReservationController implements Initializable {
     @FXML
     private ComboBox<String> to;
     
+   
+
+    @FXML
+    private TableColumn<?, ?> date2Id;
+
+    @FXML
+    private TableColumn<?, ?> dateId;
+
+    @FXML
+    private TableColumn<?, ?> destinationId;
+
+    @FXML
+    private TableColumn<?, ?> emailId;
+
+    @FXML
+    private TableColumn<?, ?> firstNameId;
+
+    @FXML
+    private TableColumn<?, ?> lastNameId;
+
+    @FXML
+    private TableColumn<?, ?> seatId;
+
+    @FXML
+    private TableColumn<?, ?> souceId;
+
+
+    @FXML
+    private TableColumn<?, ?> timeId;
+
+    
     private Customer customer;
+    
+    @FXML
+    private DatePicker datepickId;
     
     ResultSet resultSet;
     PreparedStatement pst;
@@ -176,8 +208,6 @@ public class ReservationController implements Initializable {
     	    return;
     	}
 */
- 
-
     	// show the login window
     
     	// get the customer object
@@ -308,7 +338,23 @@ public class ReservationController implements Initializable {
 		  stage.setScene(scene);
 		  stage.show();
 	}
- 
+	@FXML
+	 public void ToViewReservation(ActionEvent event) throws IOException {
+		  Parent root = FXMLLoader.load(getClass().getResource("viewReservation.fxml"));
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  stage.setScene(scene);
+		  stage.show();
+	}
+
+	@FXML
+	 public void Towelcome(ActionEvent event) throws IOException {
+		  Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
+		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		  scene = new Scene(root);
+		  stage.setScene(scene);
+		  stage.show();
+	}
 
 	
     
