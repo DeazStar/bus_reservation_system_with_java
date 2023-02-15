@@ -42,6 +42,7 @@ import com.busreservationsystem.model.*;
 import com.busreservationsystem.model.Route;
 import com.busreservationsystem.model.Bus;
 import com.busreservationsystem.model.BusDriver;
+import com.busreservationsystem.Exception.InvalidDateFormatException;
 import com.busreservationsystem.Exception.InvalidTimeFormatException;
 import com.busreservationsystem.controller.Administrator;
 import java.time.LocalTime;
@@ -124,9 +125,11 @@ public class adminController implements Initializable {
 		// add data to bus
 		bus.setDriver(null);
 		bus.setRoute(route);
-		bus.setDate(dateId.getValue());
 		
-			try {
+			bus.setDate(dateId.getValue());
+				
+		try 
+		{
 			  validateTime(deptime_TextField.getText());
 			  
 			  bus.setDepartureTime(LocalTime.parse(deptime_TextField.getText(), DateTimeFormatter.ofPattern("HH:mm:ss")));
@@ -172,7 +175,7 @@ public class adminController implements Initializable {
 		    throw new InvalidTimeFormatException();
 		  }
 		}
-
+	 
 	@FXML
 	private void refreshTable() {
 		// create an observablelist to store data

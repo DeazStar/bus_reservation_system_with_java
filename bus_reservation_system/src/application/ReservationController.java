@@ -25,11 +25,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import com.busreservationsystem.model.*;
-import com.busreservationsystem.model.Route;
 import com.busreservationsystem.user.Customer;
-import com.busreservationsystem.model.Bus;
-import com.busreservationsystem.model.BusDriver;
 import com.busreservationsystem.controller.*;
 import java.time.LocalTime;
 import java.time.LocalDate;
@@ -43,7 +39,34 @@ import javafx.util.Callback;
 
 
 public class ReservationController implements Initializable {
-    
+
+	   
+	    @FXML
+	    private TableColumn<?, ?> date2Id;
+
+	   
+	    @FXML
+	    private TableColumn<?, ?> destinationId;
+
+	    @FXML
+	    private TableColumn<?, ?> emailId;
+
+	    @FXML
+	    private TableColumn<?, ?> firstNameId;
+
+	    @FXML
+	    private TableColumn<?, ?> lastNameId;
+
+	    @FXML
+	    private TableColumn<?, ?> seatId;
+
+	    @FXML
+	    private TableColumn<?, ?> souceId;
+
+	    @FXML
+	    private TableColumn<?, ?> timeId;
+
+
      @FXML
     private TableColumn<Bus, LocalTime> arrive;
 
@@ -54,7 +77,7 @@ public class ReservationController implements Initializable {
     private TableColumn<Bus, LocalDate> date;
 
     @FXML
-    private DatePicker dateId;
+    private TableColumn<Bus, LocalDate> dateId;
 
     @FXML
     private TableColumn<Bus, LocalTime> departure;

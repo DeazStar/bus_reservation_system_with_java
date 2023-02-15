@@ -26,7 +26,7 @@ public class Main extends Application
 	@Override
     public void start(Stage primaryStage) {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("welcome.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("viewReservation.fxml"));
             Scene scene = new Scene(parent);
             
             primaryStage.setTitle("AFRI BUS");
