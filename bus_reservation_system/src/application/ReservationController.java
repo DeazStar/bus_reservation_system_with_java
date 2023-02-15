@@ -10,7 +10,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -85,6 +88,54 @@ public class ReservationController implements Initializable {
     void search(ActionEvent event) {
         loadData();
         
+    }
+    
+    public int bookSeat(int customerId, int busId) {
+        String url = "jdbc:mysql://localhost:3306/busreservation_db";
+        String databaseUsername = "customer";
+        String password = "Customer123$";
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int availableSeat = -1;
+        try {
+            conn = DriverManager.getConnection(url, databaseUsername, password);
+            String query = "SELECT number_of_seats FROM bus WHERE id = ?";
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, busId);
+            rs = stmt.executeQuery();
+            int numSeats = 0;
+            if (rs.next()) {
+                numSeats = rs.getInt("number_of_seats");
+            }
+            
+            query = "SELECT seat FROM reservation WHERE bus_id = ?";
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, busId);
+            rs = stmt.executeQuery();
+            Set<Integer> reservedSeats = new HashSet<>();
+            while (rs.next()) {
+                reservedSeats.add(rs.getInt("seat"));
+            }
+            
+            for (int i = 1; i <= numSeats; i++) {
+                if (!reservedSeats.contains(i)) {
+                    availableSeat = i;
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return availableSeat;
     }
     
     
