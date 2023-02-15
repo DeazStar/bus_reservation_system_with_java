@@ -32,7 +32,7 @@ public class addORviewController {
 		 }
 	@FXML
 	 public void toAddDriver(ActionEvent event) throws IOException {
-		  Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
+		  Parent root = FXMLLoader.load(getClass().getResource("driver.fxml"));
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
 		  stage.setScene(scene);
@@ -40,7 +40,7 @@ public class addORviewController {
 		 }
 	@FXML
 	 public void tologin(ActionEvent event) throws IOException {
-		  Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
+		  Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
 		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		  scene = new Scene(root);
 		  stage.setScene(scene);

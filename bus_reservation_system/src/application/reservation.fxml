@@ -6,30 +6,46 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="640.0" prefWidth="860.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19" fx:controller="application.ReservationController">
+<AnchorPane id="AnchorPane" prefHeight="567.0" prefWidth="941.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ReservationController">
    <children>
-      <TableView fx:id="tableId" layoutX="7.0" layoutY="388.0" prefHeight="232.0" prefWidth="853.0">
+      <TableView fx:id="tableId" layoutX="12.0" layoutY="299.0" prefHeight="243.0" prefWidth="923.0" style="-fx-background-color: #0001;">
         <columns>
           <TableColumn fx:id="busId" prefWidth="75.0" text="Bus no" />
-          <TableColumn fx:id="driver" prefWidth="75.0" text="Driver" />
-            <TableColumn fx:id="price" prefWidth="57.60003662109375" text="Price" />
-            <TableColumn fx:id="departure" prefWidth="92.80000305175781" text="Departure time" />
-            <TableColumn fx:id="arrive" prefWidth="101.5999755859375" text="arrival time" />
-            <TableColumn fx:id="source" prefWidth="120.00009155273438" text="Source " />
-            <TableColumn fx:id="destination" prefWidth="123.99990844726562" text="Destination" />
-            <TableColumn fx:id="date" prefWidth="124.0" text="Date" />
-            <TableColumn fx:id="seat" text="Total seat" />
+            <TableColumn fx:id="arrive" prefWidth="122.6666259765625" text="arrival time" />
+            <TableColumn fx:id="source" prefWidth="99.99996948242188" text="Source " />
+            <TableColumn fx:id="destination" prefWidth="104.66668701171875" text="Destination" />
+          <TableColumn fx:id="driver" minWidth="0.0" prefWidth="0.0" text="Driver" />
+            <TableColumn fx:id="departure" prefWidth="131.99998474121094" text="Departure time" />
+            <TableColumn fx:id="date" prefWidth="103.3333740234375" text="Date" />
+            <TableColumn fx:id="seat" prefWidth="96.66668701171875" text="Total seat" />
+            <TableColumn fx:id="price" prefWidth="97.33332061767578" text="Price" />
         </columns>
       </TableView>
-      <ComboBox fx:id="from" layoutX="177.0" layoutY="45.0" prefWidth="150.0" promptText="from" />
-      <ComboBox fx:id="to" layoutX="175.0" layoutY="108.0" prefWidth="150.0" promptText="to" />
-      <DatePicker fx:id="dateId" layoutX="151.0" layoutY="187.0" />
+      <ComboBox fx:id="from" layoutX="354.0" layoutY="46.0" prefHeight="34.0" prefWidth="150.0" promptText="from" />
+      <ComboBox fx:id="to" layoutX="355.0" layoutY="107.0" prefHeight="34.0" prefWidth="150.0" promptText="to" />
+      <DatePicker fx:id="dateId" layoutX="355.0" layoutY="170.0" prefHeight="34.0" prefWidth="150.0" />
       <Label layoutX="73.0" layoutY="49.0" text="Source" />
       <Label layoutX="77.0" layoutY="112.0" text="Destination" />
       <Label layoutX="77.0" layoutY="191.0" text="Date" />
-      <Button fx:id="search" layoutX="198.0" layoutY="242.0" mnemonicParsing="false" onAction="#search" text="Search" />
+      <Button fx:id="search" layoutX="384.0" layoutY="231.0" mnemonicParsing="false" onAction="#search" prefHeight="24.0" prefWidth="83.0" text="Search">
+         <font>
+            <Font name="Agency FB Bold" size="15.0" />
+         </font></Button>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="112.0" layoutY="75.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../LOGO.png" />
+         </image>
+      </ImageView>
+      <Label text="Label" />
+      <Label layoutX="158.0" layoutY="181.0" text="Afri bus" textFill="#55bfe0">
+         <font>
+            <Font name="Agency FB Bold" size="20.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -15,7 +15,9 @@ public class Admin extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("adminlogin.fxml"));
 			Scene scene = new Scene(root);
 			stage.setScene(scene);
-			
+
+			stage.setResizable(false); // Set stage to be non-expandable
+
 			stage.show();
 			
 		} catch(Exception e) 

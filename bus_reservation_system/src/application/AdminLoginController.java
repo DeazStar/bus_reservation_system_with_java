@@ -50,7 +50,7 @@ public class AdminLoginController
 					if (nameid.getText().equals("admin") && passid.getText().equals("123"))
 					{
 						
-							  Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
+							  Parent root = FXMLLoader.load(getClass().getResource("addORview.fxml"));
 							  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 							  scene = new Scene(root);
 							  stage.setScene(scene);

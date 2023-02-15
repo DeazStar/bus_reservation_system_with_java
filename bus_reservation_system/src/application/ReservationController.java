@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
 package application;
+import java.io.IOException;
 import java.lang.*;
 import com.busreservationsystem.model.Bus;
 import java.net.URL;
@@ -18,10 +19,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import com.busreservationsystem.model.*;
 import com.busreservationsystem.model.Route;
+import com.busreservationsystem.user.Customer;
 import com.busreservationsystem.model.Bus;
 import com.busreservationsystem.model.BusDriver;
 import com.busreservationsystem.controller.*;
@@ -32,13 +37,10 @@ import java.sql.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
-/**
- * FXML Controller class
- *
- * @author HP
- */
+
 public class ReservationController implements Initializable {
     
      @FXML
@@ -102,7 +104,7 @@ public class ReservationController implements Initializable {
         int availableSeat = -1;
         try {
             conn = DriverManager.getConnection(url, databaseUsername, password);
-            String query = "SELECT number_of_seats FROM bus WHERE id = ?";
+            String query = "SELECT number_of_seats FROM bus WHERE bus_id = ?";
             stmt = conn.prepareStatement(query);
             stmt.setInt(1, busId);
             rs = stmt.executeQuery();
@@ -149,7 +151,27 @@ public class ReservationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+    	FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+
+    	Parent root;
+    	try {
+    	    root = loader.load();
+    	} catch (IOException e) {
+    	    e.printStackTrace();
+    	    return;
+    	}
+
+    	LoginController loginController = loader.getController();
+
+    	// show the login window
+    	Stage stage = new Stage();
+    	stage.setScene(new Scene(root));
+    	stage.showAndWait();
+
+    	// get the customer object
+    	Customer customer = loginController.getCustomer();
     	
+    	System.out.println(customer);
     	Reservation admin = new Reservation();
         TableColumn<Bus, Void> actionCol = new TableColumn<>("Action");
         Callback<TableColumn<Bus, Void>, TableCell<Bus, Void>> cellFactory = new Callback<TableColumn<Bus, Void>, TableCell<Bus, Void>>() {
@@ -160,36 +182,10 @@ public class ReservationController implements Initializable {
 
               {
                 editButton.setOnAction((ActionEvent event) -> {
-//                  Bus data = getTableView().getItems().get(getIndex());
-//                  
-//                  FXMLLoader loader = new FXMLLoader(getClass().getResource("editBus.fxml"));
-//                  
-//                    Parent root;
-//                      try {
-//                          root = loader.load();
-//                      } catch (IOException e) {
-//                          e.printStackTrace();
-//                          return;
-//                      }
-//                      
-//                  EditBusController editController = loader.getController();
-//                  
-//                    Stage stage = new Stage();
-//                    stage.setScene(new Scene(root));
-//                    stage.showAndWait();
-//                    
-//                    
-//                      Bus updatedBus = editController.geteUpdateBus();
-//                      
-//                      updatedBus.setDriver(data.getDrivere());
-//                      updatedBus.getRoute().setRouteId(data.getRoute().getRouteId());
-//                  // call the edit method
-//                  admin.editBus(data, updatedBus); 
-//                  
-
-                  /*int selectedIndex = getTableRow().getIndex();
-                  tableid.getItems().set(selectedIndex, updatedBus);*/
-            
+                  Bus data = getTableView().getItems().get(getIndex());
+                  int seatNumber = bookSeat(customer.getCustomerId(), data.getBusId());
+                  System.out.println(seatNumber);
+                  customer.setReservation(seatNumber, data, data.getBusTicketPrice());        
                 });
               }
 
@@ -212,7 +208,6 @@ public class ReservationController implements Initializable {
 
         actionCol.setCellFactory(cellFactory);//cpy
         tableId.getColumns().addAll(actionCol);//cpy
-    	
         connect();
         
     busId.setCellValueFactory(new PropertyValueFactory<>("busId"));

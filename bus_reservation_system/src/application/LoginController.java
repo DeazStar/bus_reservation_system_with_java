@@ -52,7 +52,13 @@ public class LoginController {
     @FXML
     private Button back;
     
- 		
+    private Customer customer;
+    
+ 	
+    public Customer getCustomer() {
+        return customer;
+    }
+
 	public void cancel(ActionEvent e)
 	{
 		Stage stage= (Stage) cancelid.getScene().getWindow();
@@ -61,39 +67,32 @@ public class LoginController {
 	
 	public Customer login(ActionEvent event) throws SQLException
 	{
-		if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false)
+		Customer customer = null;
+		while (customer == null)
 		{
-			try {
-				loginverify(event);
-				
-			} catch (SQLException | IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false)
+			{
+				try {
+					loginverify(event);
+					
+				} catch (SQLException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-		}
-		else 
-		{
-			labelid.setText("Please enter username and password");
-		}
-		
-		CustomerManagment cmg = new CustomerManagment();
-		Customer customer = cmg.login(nameid.getText(), passid.getText());
-		
-		if (customer == null) {
-			labelid.setText("Please enter correct username and password");
-		} else {
-			try {
-				root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			else 
+			{
+				labelid.setText("Please enter username and password");
 			}
-			  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-			  scene = new Scene(root);
-			  stage.setScene(scene);
-			  stage.show();
-			  return customer;
+			
+			CustomerManagment cmg = new CustomerManagment();
+			customer = cmg.login(nameid.getText(), passid.getText());
+			
+			if (customer == null) {
+				labelid.setText("Please enter correct username and password");
+			}	
 		}
+
 		
 		return customer;
 		
@@ -101,13 +100,25 @@ public class LoginController {
 		
 }
 	
+	
 
 	@SuppressWarnings("null")
 	@FXML
 	public void loginverify(ActionEvent event) throws SQLException, IOException {
-		CustomerManagment c =new CustomerManagment();
-		
-		c.login(nameid.getText(), passid.getText());
+	    // Check if the login is valid
+	    // ...
+
+	    // Set the customer object and close the window
+	    CustomerManagment cmg = new CustomerManagment();
+	    Customer customer = cmg.login(nameid.getText(), passid.getText());
+	    if (customer != null) {
+	        // set the customer object
+	        this.customer = customer;
+
+	        // close the login window
+	        Stage stage = (Stage) nameid.getScene().getWindow();
+	        stage.close();
+	    }
 		
 }
 		
