@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="629.0" prefWidth="1151.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.adminController">
+<AnchorPane prefHeight="629.0" prefWidth="1184.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.adminController">
    <children>
-      <TableView fx:id="tableid" layoutX="13.0" layoutY="146.0" prefHeight="471.0" prefWidth="1131.0" style="-fx-background-color: #0001;">
+      <TableView fx:id="tableid" layoutX="18.0" layoutY="146.0" prefHeight="471.0" prefWidth="1154.0" style="-fx-background-color: #0001;">
         <columns>
           <TableColumn fx:id="busnoid" prefWidth="70.88887786865234" text="bus no" />
             <TableColumn fx:id="driverid" prefWidth="113.99998474121094" text="Driver id" />
@@ -35,11 +35,11 @@
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font></Button>
-      <Button layoutX="21.0" layoutY="12.0" mnemonicParsing="false" onAction="#toViewCustomer" prefHeight="38.0" prefWidth="133.0" text="Custumors">
+      <Button layoutX="21.0" layoutY="11.0" mnemonicParsing="false" onAction="#toViewCustomer" prefHeight="43.0" prefWidth="128.0" text="Custumors">
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font></Button>
-      <Button layoutX="1035.0" layoutY="15.0" mnemonicParsing="false" onAction="#ToaddORview" prefHeight="38.0" prefWidth="81.0" text="Back">
+      <Button layoutX="1076.0" layoutY="16.0" mnemonicParsing="false" onAction="#ToaddORview" prefHeight="38.0" prefWidth="81.0" text="Back">
          <font>
             <Font name="Agency FB Bold" size="14.0" />
          </font></Button>

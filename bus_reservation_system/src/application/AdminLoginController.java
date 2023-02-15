@@ -24,7 +24,6 @@ public class AdminLoginController
 		private Scene scene;
 		private Parent root;
 
-		
 	    @FXML
 	    private Button back;
 

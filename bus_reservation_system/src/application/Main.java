@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,8 +30,14 @@ public class Main extends Application
             Scene scene = new Scene(parent);
             
             primaryStage.setTitle("AFRI BUS");
-            primaryStage.setResizable(false);
+           
+            
             primaryStage.setScene(scene);
+           
+            primaryStage.setResizable(false);
+            primaryStage.initStyle(StageStyle.UNDECORATED);   
+
+            
             primaryStage.show();
         } catch (IOException ex) 
         {

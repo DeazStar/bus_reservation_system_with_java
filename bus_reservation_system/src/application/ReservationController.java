@@ -21,6 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -261,5 +262,17 @@ public class ReservationController implements Initializable {
         data.addAll(reserver.showAvailableBus(Date, sour,dest));
         tableId.setItems(data);
     }
+	private Stage stage;
+	private Scene scene;
+
+    
+    @FXML
+    public void ToReservation(ActionEvent event) throws IOException {
+   	  Parent root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
+   	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+   	  scene = new Scene(root);
+   	  stage.setScene(scene);
+   	  stage.show();
+   }
     
 }
