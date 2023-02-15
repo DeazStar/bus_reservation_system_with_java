@@ -19,8 +19,11 @@
       <TextField fx:id="lastNameId" layoutX="246.0" layoutY="59.0" prefHeight="35.0" prefWidth="149.0" promptText="lastName" />
       <TextField fx:id="regionId" layoutX="443.0" layoutY="249.0" prefHeight="35.0" prefWidth="149.0" promptText="region" />
       <Label layoutX="378.0" layoutY="200.0" text="Address:" />
-      <DatePicker fx:id="dateId" layoutX="243.0" layoutY="122.0" prefHeight="35.0" prefWidth="149.0" promptText="date of birth" />
-      <Label layoutX="113.0" layoutY="200.0" text="Gender:" />
+      <DatePicker fx:id="dateId" layoutX="245.0" layoutY="121.0" prefHeight="35.0" prefWidth="149.0" promptText="date of birth" />
+      <Label layoutX="113.0" layoutY="201.0" text="Gender:" textFill="WHITE">
+         <font>
+            <Font name="Agency FB" size="18.0" />
+         </font></Label>
       <RadioButton fx:id="male" layoutX="175.0" layoutY="191.0" mnemonicParsing="false" text="male" textFill="WHITE">
          <toggleGroup>
             <ToggleGroup fx:id="gender" />

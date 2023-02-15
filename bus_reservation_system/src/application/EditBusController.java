@@ -2,9 +2,11 @@ package application;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.fxml.Initializable;
 
@@ -68,7 +70,18 @@ public class EditBusController implements Initializable{
     
     @FXML
     private void handleSaveButtonAction(ActionEvent event) {
-        // Get updated bus data from the form
+    	if (sourceId.getText().isBlank() == true || departureTimeId.getText().isBlank() == true || departureTimeId.getText().isBlank() == true)
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+		    alert.setContentText("Please Enter Full Bus Information");
+			alert.showAndWait();
+			
+			return;
+		}
+		
+    	
+    	
+    	// Get updated bus data from the form
         Bus updatedBus = geteUpdateBus();
 
         // Close the window

@@ -55,6 +55,11 @@ public class AdminLoginController
 							  stage.setScene(scene);
 							  stage.show();
 					}
+					else 
+					{
+						labelid.setText("invalid login");
+					}
+					
 									
 				} 
 				catch (IOException e) {

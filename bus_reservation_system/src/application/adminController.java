@@ -29,6 +29,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -115,6 +116,16 @@ public class adminController implements Initializable {
 
 	@FXML
 	private void add() {
+		
+		if (source_TextField.getText().isBlank() == true || source_TextField.getText().isBlank() == true || price_TextField.getText().isBlank() == true)
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+		    alert.setContentText("Please Enter Full Bus Information");
+			alert.showAndWait();
+			return;
+		}
+		
+		
 		Bus bus = new Bus();
 		Route route = new Route();
 
@@ -125,8 +136,7 @@ public class adminController implements Initializable {
 		// add data to bus
 		bus.setDriver(null);
 		bus.setRoute(route);
-		
-			bus.setDate(dateId.getValue());
+		bus.setDate(dateId.getValue());
 				
 		try 
 		{

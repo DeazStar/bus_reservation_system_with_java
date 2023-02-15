@@ -11,7 +11,5 @@ public class InvalidTimeFormatException extends Exception {
 		  Alert alert = new Alert(AlertType.ERROR);
 		    alert.setContentText("Invalid time format. Time should be in HH:mm:ss format.");
 			alert.showAndWait();
-
-			
 	  }
 }

@@ -41,33 +41,10 @@ import javafx.util.Callback;
 public class ReservationController implements Initializable {
 
 	   
-	    @FXML
-	    private TableColumn<?, ?> date2Id;
+	  @FXML
+	 private DatePicker datePIck;
 
-	   
-	    @FXML
-	    private TableColumn<?, ?> destinationId;
-
-	    @FXML
-	    private TableColumn<?, ?> emailId;
-
-	    @FXML
-	    private TableColumn<?, ?> firstNameId;
-
-	    @FXML
-	    private TableColumn<?, ?> lastNameId;
-
-	    @FXML
-	    private TableColumn<?, ?> seatId;
-
-	    @FXML
-	    private TableColumn<?, ?> souceId;
-
-	    @FXML
-	    private TableColumn<?, ?> timeId;
-
-
-     @FXML
+	     @FXML
     private TableColumn<Bus, LocalTime> arrive;
 
     @FXML

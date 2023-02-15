@@ -26,7 +26,7 @@ public class Main extends Application
 	@Override
     public void start(Stage primaryStage) {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("viewReservation.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("welcome.fxml"));
             Scene scene = new Scene(parent);
             
             primaryStage.setTitle("AFRI BUS");
@@ -35,11 +35,13 @@ public class Main extends Application
             primaryStage.setScene(scene);
            
             primaryStage.setResizable(false);
-            primaryStage.initStyle(StageStyle.UNDECORATED);   
+//	            primaryStage.initStyle(StageStyle.TRANSPARENT);
+    //			primaryStage.initStyle(StageStyle.UNDECORATED);   
 
             
             primaryStage.show();
         } catch (IOException ex) 
+       
         {
         	ex.printStackTrace();
         }

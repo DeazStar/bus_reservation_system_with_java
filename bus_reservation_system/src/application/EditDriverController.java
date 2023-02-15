@@ -3,6 +3,7 @@ package application;
 import com.busreservationsystem.base.Address;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -21,6 +22,7 @@ import java.util.ResourceBundle;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 public class EditDriverController implements Initializable{
 
     @FXML
@@ -91,6 +93,15 @@ public class EditDriverController implements Initializable{
     
     @FXML
     void handleSaveButtonHandle(ActionEvent event) {
+    
+    	if (firstNameId.getText().isBlank() == true || lastNameId.getText().isBlank() == true || streetId.getText().isBlank() == true)
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+		    alert.setContentText("Please Enter Full Bus Information");
+			alert.showAndWait();
+			return;
+		}
+    	
     BusDriver updateDriver = getUpdateDriver();
     Stage stage = (Stage) saveId.getScene().getWindow();
     stage.close();
