@@ -4,25 +4,22 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.paint.LinearGradient?>
-<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2d3445;" stylesheets="@css.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Main">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2d3442;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Main">
    <children>
-      <Button layoutX="156.0" layoutY="231.0" mnemonicParsing="false" onAction="#toCustomerlogin" prefHeight="22.0" prefWidth="108.0" styleClass="btn" text="Customer" textFill="#beecff">
+      <Button layoutX="157.0" layoutY="223.0" mnemonicParsing="false" onAction="#toCustomerlogin" prefHeight="39.0" prefWidth="108.0" text="Customer">
          <font>
             <Font name="Agency FB Bold" size="17.0" />
          </font>
       </Button>
-      <Button layoutX="325.0" layoutY="229.0" mnemonicParsing="false" onAction="#toAdminlogin" prefHeight="39.0" prefWidth="108.0" styleClass="btn" text="Admin">
+      <Button layoutX="316.0" layoutY="223.0" mnemonicParsing="false" onAction="#toAdminlogin" prefHeight="39.0" prefWidth="108.0" text="Admin">
          <font>
             <Font name="Agency FB Bold" size="17.0" />
          </font>
       </Button>
-      <Button fx:id="cancelid" layoutX="484.0" layoutY="27.0" mnemonicParsing="false" onAction="#cancel" prefHeight="27.0" prefWidth="86.0" styleClass="btn" stylesheets="@css.css" text="Exit" textFill="#090000">
+      <Button fx:id="cancelid" layoutX="509.0" layoutY="27.0" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="60.0" text="Exit" textFill="#090000">
          <font>
             <Font name="Agency FB Bold" size="15.0" />
          </font>
@@ -32,52 +29,15 @@
             <Image url="@../../../../../../../Downloads/—Pngtree—vector%20bus%20icon_4156142.png" />
          </image>
       </ImageView>
-      <Text layoutX="199.0" layoutY="189.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="gradient" text="Welcome To  Afribus" wrappingWidth="207.99993896484375">
+      <Text fill="#29a5d6" layoutX="214.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome To  Afribus" wrappingWidth="176.6666259765625">
          <font>
-            <Font name="Agency FB Bold" size="28.0" />
+            <Font name="Agency FB Bold" size="24.0" />
          </font>
-         <fill>
-            <LinearGradient endX="0.20504731861198736" endY="1.0" startX="0.19873817034700314" startY="0.2555205047318612">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="0.012183235958218575" green="0.48570501804351807" blue="0.6578947305679321" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="0.7599999904632568" green="0.8690232038497925" blue="1.0" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </fill>
       </Text>
-      <ImageView fitHeight="161.0" fitWidth="162.0" layoutX="215.0" layoutY="31.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="214.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../LOGO.png" />
          </image>
       </ImageView>
-      <Text layoutX="498.0" layoutY="373.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Afribus.com">
-         <font>
-            <Font name="Agency FB Bold" size="18.0" />
-         </font>
-         <fill>
-            <LinearGradient endX="0.9305993450176828" endY="0.7539432176656151">
-               <stops>
-                  <Stop>
-                     <color>
-                        <Color red="0.2238466590642929" green="0.47704678773880005" blue="0.6842105388641357" />
-                     </color>
-                  </Stop>
-                  <Stop offset="1.0">
-                     <color>
-                        <Color red="0.7543859481811523" green="0.48196882009506226" blue="0.504670262336731" />
-                     </color>
-                  </Stop>
-               </stops>
-            </LinearGradient>
-         </fill>
-      </Text>
    </children>
 </AnchorPane>

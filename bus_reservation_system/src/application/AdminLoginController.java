@@ -17,69 +17,58 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class AdminLoginController 
-{
-	
-		private Stage stage;
-		private Scene scene;
-		private Parent root;
+public class AdminLoginController {
 
-	    @FXML
-	    private Button back;
+	private Stage stage;
+	private Scene scene;
+	private Parent root;
 
-	    @FXML
-	    private Label labelid;
+	@FXML
+	private Button back;
 
-	    @FXML
-	    private Button loginid;
+	@FXML
+	private Label labelid;
 
-	    @FXML
-	    private TextField nameid;
+	@FXML
+	private Button loginid;
 
-	    @FXML
-	    private PasswordField passid;
+	@FXML
+	private TextField nameid;
 
-	   
-	    @FXML
-	    void login(ActionEvent event) 
-	    {
-	    	if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false)
-			{
-				try {
-					if (nameid.getText().equals("admin") && passid.getText().equals("123"))
-					{
-						
-							  Parent root = FXMLLoader.load(getClass().getResource("addORview.fxml"));
-							  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-							  scene = new Scene(root);
-							  stage.setScene(scene);
-							  stage.show();
-					}
-					else 
-					{
-						labelid.setText("invalid login");
-					}
-					
-									
-				} 
-				catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+	@FXML
+	private PasswordField passid;
+
+	@FXML
+	void login(ActionEvent event) {
+		if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false) {
+			try {
+				if (nameid.getText().equals("admin") && passid.getText().equals("123")) {
+
+					Parent root = FXMLLoader.load(getClass().getResource("addORview.fxml"));
+					stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+					scene = new Scene(root);
+					stage.setScene(scene);
+					stage.show();
+				} else {
+					labelid.setText("invalid login");
 				}
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			else 
-			{
-				labelid.setText("Please enter username and password");
-			}
-	    }
-     @FXML	
-	   public void ToWelcome(ActionEvent event) throws IOException {
-	    		  Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
-	    		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-	    		  scene = new Scene(root);
-	    		  stage.setScene(scene);
-	    		  stage.show();
-	    	
-	    }
+		} else {
+			labelid.setText("Please enter username and password");
+		}
+	}
+
+	@FXML
+	public void ToWelcome(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+
+	}
 }
-	   

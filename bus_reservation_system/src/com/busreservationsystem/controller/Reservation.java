@@ -15,6 +15,11 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+/*
+add setter and getter for date , time , bus and customer;
+that's all i added to the file!
+
+*/
 public class Reservation {
 
 	private int seatNumber;
@@ -32,12 +37,36 @@ public class Reservation {
 	}
 
 	public void setSeatNumber(int seatNumber) {
-		this.seatNumber = this.seatNumber;
+		this.seatNumber = seatNumber;
 
 	}
 
 	public int getSeatNumber() {
-		return this.seatNumber;
+		return seatNumber;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setTime(LocalTime time) {
+		this.time = time;
+	}
+
+	public LocalTime getTime() {
+		return time;
+	}
+
+	public Bus getBus() {
+		return bus;
+	}
+
+	public Customer getCustomer() {
+		return customer;
 	}
 
 	// we may not need this

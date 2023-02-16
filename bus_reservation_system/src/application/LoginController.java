@@ -32,46 +32,51 @@ public class LoginController {
 	private Scene scene;
 	private Parent root;
 	@FXML
-    private Button cancelid;
+	private Button cancelid;
 
-    @FXML
-    private Label labelid;
+	@FXML
+	private Label labelid;
 
-    @FXML
-    private Button loginid;
+	@FXML
+	private Button loginid;
 
-    @FXML
-    private TextField nameid;
+	@FXML
+	private TextField nameid;
 
-    @FXML
-    private PasswordField passid;
+	@FXML
+	private PasswordField passid;
 
-    @FXML
-    private Button signupid;
+	@FXML
+	private Button signupid;
 
-    @FXML
-    private Button back;
-    
+	@FXML
+	private Button back;
 
-	public void cancel(ActionEvent e){
-		Stage stage= (Stage) cancelid.getScene().getWindow();
+	public void cancel(ActionEvent e) {
+		Stage stage = (Stage) cancelid.getScene().getWindow();
 		stage.close();
 	}
+<<<<<<< HEAD
 	
 	public void login(ActionEvent event) throws SQLException, IOException {
 		
 		if (nameid.getText().isBlank() == true || passid.getText().isBlank() == true)
 		{
+=======
+
+	public void login(ActionEvent event) throws SQLException {
+
+		if (nameid.getText().isBlank() == true || passid.getText().isBlank() == true) {
+>>>>>>> 37e5222af0dab90cae0079ade93c1f60b4e39c72
 			labelid.setText("Please enter username and password");
 			return;
 		}
-		
-		while (StaticCustomer.customer == null)
-		{
-			if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false)
-			{
+
+		while (StaticCustomer.customer == null) {
+			if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false) {
 				CustomerManagment cmg = new CustomerManagment();
 				StaticCustomer.customer = cmg.login(nameid.getText(), passid.getText());
+<<<<<<< HEAD
 					
 				
 				    		  Parent root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
@@ -81,82 +86,82 @@ public class LoginController {
 				    		  stage.show();
 				    	
 				    		 break;
+=======
+			} else {
+				labelid.setText("Please enter username and password");
+>>>>>>> 37e5222af0dab90cae0079ade93c1f60b4e39c72
 			}
-			
-			
-			else if(StaticCustomer.customer == null) {
+
+			if (StaticCustomer.customer == null) {
 				labelid.setText("Please enter correct username and password");
-				return;
-			}	
+			}
 		}
-		
-  	  try
-  	  {
-		root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
-  	  }
-  	  catch (IOException e) {
-		e.printStackTrace();
+
+		try {
+			root = FXMLLoader.load(getClass().getResource("reserveORview.fxml"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+
 	}
+
+	// @SuppressWarnings("null")
+	// @FXML
+	/*
+	 * public void loginverify(ActionEvent event) throws SQLException, IOException {
+	 * // Check if the login is valid // ...
+	 * 
+	 * // Set the customer object and close the window CustomerManagment cmg = new
+	 * CustomerManagment(); Customer customer = cmg.login(nameid.getText(),
+	 * passid.getText());
+	 * 
+	 * if (customer != null) { root =
+	 * FXMLLoader.load(getClass().getResource("reservation.fxml")); stage =
+	 * (Stage)((Node)event.getSource()).getScene().getWindow(); scene = new
+	 * Scene(root); stage.setScene(scene); stage.show(); }
+	 * 
+	 * 
+	 * 
+	 * }
+	 */
+
+	@FXML
+	public void tosignup(ActionEvent event) throws IOException {
+		root = FXMLLoader.load(getClass().getResource("signup.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
-	
-	
 
-	//@SuppressWarnings("null")
-	//@FXML
-	/*public void loginverify(ActionEvent event) throws SQLException, IOException {
-	    // Check if the login is valid
-	    // ...
+	public void toReservation(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
 
-	    // Set the customer object and close the window
-	    CustomerManagment cmg = new CustomerManagment();
-	    Customer customer = cmg.login(nameid.getText(), passid.getText());
-	    
-	    if (customer != null) {
-	    	  root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
-	    	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-	    	  scene = new Scene(root);
-	    	  stage.setScene(scene);
-	    	  stage.show();
-	    }
-	    
-	    
-		
-}
-		*/
+	@FXML
+	public void toadmin(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
 
-
- @FXML
- public void tosignup(ActionEvent event) throws IOException {
-  root = FXMLLoader.load(getClass().getResource("signup.fxml"));
-  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-  scene = new Scene(root);
-  stage.setScene(scene);
-  stage.show();
- }
- 
- public void toReservation(ActionEvent event) throws IOException 
- 	  {
-	   	  Parent root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
-	   	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-	   	  scene = new Scene(root);
-	   	  stage.setScene(scene);
-	   	  stage.show();
-	   }
-
- @FXML
- public void toadmin(ActionEvent event) throws IOException {
-  Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
-  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-  scene = new Scene(root);
-  stage.setScene(scene);
-  stage.show();
- }
- @FXML
- public void ToWelcome(ActionEvent event) throws IOException {
-	  Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
-	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-	  scene = new Scene(root);
-	  stage.setScene(scene);
-	  stage.show();
-}
+	@FXML
+	public void ToWelcome(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
 }

@@ -47,5 +47,10 @@
             <Font name="Agency FB Bold" size="20.0" />
          </font>
       </Label>
+      <Button fx:id="viewBookid" layoutX="661.0" layoutY="34.0" mnemonicParsing="false" onAction="#toViewReservation" prefHeight="31.0" prefWidth="114.0" text="View Book">
+         <font>
+            <Font name="Agency FB Bold" size="15.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
