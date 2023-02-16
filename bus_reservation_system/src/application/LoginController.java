@@ -58,7 +58,7 @@ public class LoginController {
 		stage.close();
 	}
 	
-	public void login(ActionEvent event) throws SQLException {
+	public void login(ActionEvent event) throws SQLException, IOException {
 		
 		if (nameid.getText().isBlank() == true || passid.getText().isBlank() == true)
 		{
@@ -72,7 +72,15 @@ public class LoginController {
 			{
 				CustomerManagment cmg = new CustomerManagment();
 				StaticCustomer.customer = cmg.login(nameid.getText(), passid.getText());
-				break;
+					
+				
+				    		  Parent root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
+				    		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+				    		  scene = new Scene(root);
+				    		  stage.setScene(scene);
+				    		  stage.show();
+				    	
+				    		 break;
 			}
 			
 			
