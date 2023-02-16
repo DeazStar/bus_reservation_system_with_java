@@ -72,30 +72,24 @@ public class LoginController {
 			{
 				CustomerManagment cmg = new CustomerManagment();
 				StaticCustomer.customer = cmg.login(nameid.getText(), passid.getText());
-			}
-			else 
-			{
-				labelid.setText("Please enter username and password");
+				break;
 			}
 			
-			if (StaticCustomer.customer == null) {
+			
+			else if(StaticCustomer.customer == null) {
 				labelid.setText("Please enter correct username and password");
+				return;
 			}	
 		}
 		
-  	  try {
+  	  try
+  	  {
 		root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
+  	  }
+  	  catch (IOException e) {
 		e.printStackTrace();
 	}
-  	  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-  	  scene = new Scene(root);
-  	  stage.setScene(scene);
-  	  stage.show();
-		
-		
-}
+	}
 	
 	
 

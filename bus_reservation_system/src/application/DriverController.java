@@ -42,6 +42,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -131,7 +132,16 @@ public class DriverController implements Initializable {
 	private TableView<BusDriver> tableId;
 
 	@FXML
-	private void add() {
+	private void add() 
+	{
+		if (FirstNameId.getText().isBlank() == true || FirstNameId.getText().isBlank() == true || CityId.getText().isBlank() == true)
+		{
+			Alert alert = new Alert(AlertType.ERROR);
+		    alert.setContentText("Please Enter Your Full Information");
+			alert.showAndWait();
+			return;
+		}
+		
 		BusDriver driver = new BusDriver();
 		Address address = new Address();
 

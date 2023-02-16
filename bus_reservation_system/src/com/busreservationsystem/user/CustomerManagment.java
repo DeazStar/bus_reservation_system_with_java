@@ -1,6 +1,10 @@
 package com.busreservationsystem.user;
 
 import com.busreservationsystem.interfaces.FileStorage;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 import com.busreservationsystem.base.Address;
 import java.sql.SQLException;
 
@@ -106,6 +110,11 @@ public class CustomerManagment implements FileStorage {
             }
         } else {
             System.out.println("access denied");
+        	
+            Alert alert = new Alert(AlertType.ERROR);
+		    alert.setContentText("access denied");
+			alert.showAndWait();
+		
             return null;
         }
 
