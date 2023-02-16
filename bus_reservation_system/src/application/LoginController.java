@@ -56,18 +56,10 @@ public class LoginController {
 		Stage stage = (Stage) cancelid.getScene().getWindow();
 		stage.close();
 	}
-<<<<<<< HEAD
-	
-	public void login(ActionEvent event) throws SQLException, IOException {
-		
-		if (nameid.getText().isBlank() == true || passid.getText().isBlank() == true)
-		{
-=======
 
 	public void login(ActionEvent event) throws SQLException {
 
 		if (nameid.getText().isBlank() == true || passid.getText().isBlank() == true) {
->>>>>>> 37e5222af0dab90cae0079ade93c1f60b4e39c72
 			labelid.setText("Please enter username and password");
 			return;
 		}
@@ -76,20 +68,8 @@ public class LoginController {
 			if (nameid.getText().isBlank() == false && passid.getText().isBlank() == false) {
 				CustomerManagment cmg = new CustomerManagment();
 				StaticCustomer.customer = cmg.login(nameid.getText(), passid.getText());
-<<<<<<< HEAD
-					
-				
-				    		  Parent root = FXMLLoader.load(getClass().getResource("reservation.fxml"));
-				    		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-				    		  scene = new Scene(root);
-				    		  stage.setScene(scene);
-				    		  stage.show();
-				    	
-				    		 break;
-=======
 			} else {
 				labelid.setText("Please enter username and password");
->>>>>>> 37e5222af0dab90cae0079ade93c1f60b4e39c72
 			}
 
 			if (StaticCustomer.customer == null) {

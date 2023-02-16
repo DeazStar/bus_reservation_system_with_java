@@ -79,17 +79,10 @@ public class CustomerManagment implements FileStorage {
 
 					exsistingCustomer.setAddress(address);
 
-<<<<<<< HEAD
-                    connection.commit();
-                    
-                    return exsistingCustomer;
-                }
-=======
 					connection.commit();
 
 					return exsistingCustomer;
 				}
->>>>>>> 37e5222af0dab90cae0079ade93c1f60b4e39c72
 
 			} catch (SQLException ex) {
 				ex.printStackTrace();

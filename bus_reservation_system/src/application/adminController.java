@@ -85,7 +85,7 @@ public class adminController implements Initializable {
 
 	@FXML
 	private TableColumn<Bus, LocalDate> datetableId;
-
+	
 	@FXML
 	private DatePicker dateId;
 	@FXML
@@ -282,7 +282,8 @@ public class adminController implements Initializable {
 						});
 						editButton.setOnAction((ActionEvent event) -> {
 							Bus data = getTableView().getItems().get(getIndex());
-
+							
+							StaticCustomer.bus = data;
 							FXMLLoader loader = new FXMLLoader(getClass().getResource("editBus.fxml"));
 
 							Parent root;
@@ -301,10 +302,13 @@ public class adminController implements Initializable {
 
 							Bus updatedBus = editController.geteUpdateBus();
 
-							updatedBus.setDriver(data.getDrivere());
+							
 							updatedBus.getRoute().setRouteId(data.getRoute().getRouteId());
 							// call the edit method
 							admin.editBus(data, updatedBus);
+							System.out.println("hehehe"  + updatedBus.getDrivere().getDriverId());
+							admin.assignDriverToBus(data.getBusId(), updatedBus.getDrivere().getDriverId());
+							
 
 							/*
 							 * int selectedIndex = getTableRow().getIndex();
