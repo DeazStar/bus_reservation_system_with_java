@@ -42,7 +42,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -84,21 +83,20 @@ public class DriverController implements Initializable {
 
 	@FXML
 	private TextField StreetId;
-	
+
 //        @FXML
 //        private TextField genderTextFieldId;
-        
-    
-        @FXML
-        private ToggleGroup gender;
-        
-        @FXML
-        private RadioButton male;
-        
-        @FXML
-        private RadioButton female;
-	
-        @FXML
+
+	@FXML
+	private ToggleGroup gender;
+
+	@FXML
+	private RadioButton male;
+
+	@FXML
+	private RadioButton female;
+
+	@FXML
 	private TableColumn<BusDriver, String> cityId;
 
 	@FXML
@@ -132,34 +130,23 @@ public class DriverController implements Initializable {
 	private TableView<BusDriver> tableId;
 
 	@FXML
-	private void add() 
-	{
-		if (FirstNameId.getText().isBlank() == true || FirstNameId.getText().isBlank() == true || CityId.getText().isBlank() == true)
-		{
-			Alert alert = new Alert(AlertType.ERROR);
-		    alert.setContentText("Please Enter Your Full Information");
-			alert.showAndWait();
-			return;
-		}
-		
+	private void add() {
 		BusDriver driver = new BusDriver();
 		Address address = new Address();
 
 		address.setStreetAddress(StreetId.getText());
 		address.setCity(CityId.getText());
 		address.setRegion(RegionId.getText());
-                
-                
-                String genderValue = "";
-                ToggleButton selected = (ToggleButton) gender.getSelectedToggle();
-                if (selected.getText().equals("male")){
-                    genderValue = "M";
-                }
-                else if (selected.getText().equals("female")){
-                    genderValue = "F";
-                }
-                
-                driver.setGender(genderValue);
+
+		String genderValue = "";
+		ToggleButton selected = (ToggleButton) gender.getSelectedToggle();
+		if (selected.getText().equals("male")) {
+			genderValue = "M";
+		} else if (selected.getText().equals("female")) {
+			genderValue = "F";
+		}
+
+		driver.setGender(genderValue);
 		driver.setFirstName(FirstNameId.getText());
 		driver.setLastName(LastNameId.getText());
 //		driver.setGender(genderTextFieldId.getText());
@@ -175,92 +162,90 @@ public class DriverController implements Initializable {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setContentText("Driver added Succesfuly");
 		alert.showAndWait();
-		
+
 		refreshTable();
 	}
 
 	private void refreshTable() {
-		//create an observablelist to store data
+		// create an observablelist to store data
 		ObservableList<BusDriver> data = FXCollections.observableArrayList();
-		
+
 		// fetch data from database and add it to the observable list
-        Connection connection = null;
-        PreparedStatement statement = null;
+		Connection connection = null;
+		PreparedStatement statement = null;
 
-        	    try {
-        	        String url = "jdbc:mysql://localhost:3306/busreservation_db";
-        	        String databaseUsername = "customer";
-        	        String password = "Customer123$";
-        	        connection = DriverManager.getConnection(url, databaseUsername, password);
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String databaseUsername = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, databaseUsername, password);
 
-        	        String sql = "SELECT `bus_driver`.`bus_driver_id`, `bus_driver`.`first_name`, `bus_driver`.`last_name`, "
-        	                + "`bus_driver`.`gender`, `bus_driver`.`date_of_birth`, `bus_driver`.`email`, `bus_driver`.`phone_number`, "
-        	                + "`bus_driver`.`assigned_bus`, `address`.`street_address`, `address`.`city`, `address`.`region`, "
-        	                + "`bus`.`bus_id`, `bus`.`date`, `bus`.`departure_time`, `bus`.`arrival_time`, `bus`.`bus_ticket_price`, "
-        	                + "`bus`.`number_of_seats`, `route`.`source`, `route`.`destination` "
-        	                + "FROM `bus_driver` "
-        	                + "LEFT JOIN `address` ON `bus_driver`.`address_id` = `address`.`address_id` "
-        	                + "LEFT JOIN `bus` ON `bus_driver`.`assigned_bus` = `bus`.`bus_id` "
-        	                + "LEFT JOIN `route` ON `bus`.`route_id` = `route`.`route_id`";
+			String sql = "SELECT `bus_driver`.`bus_driver_id`, `bus_driver`.`first_name`, `bus_driver`.`last_name`, "
+					+ "`bus_driver`.`gender`, `bus_driver`.`date_of_birth`, `bus_driver`.`email`, `bus_driver`.`phone_number`, "
+					+ "`bus_driver`.`assigned_bus`, `address`.`street_address`, `address`.`city`, `address`.`region`, "
+					+ "`bus`.`bus_id`, `bus`.`date`, `bus`.`departure_time`, `bus`.`arrival_time`, `bus`.`bus_ticket_price`, "
+					+ "`bus`.`number_of_seats`, `route`.`source`, `route`.`destination` " + "FROM `bus_driver` "
+					+ "LEFT JOIN `address` ON `bus_driver`.`address_id` = `address`.`address_id` "
+					+ "LEFT JOIN `bus` ON `bus_driver`.`assigned_bus` = `bus`.`bus_id` "
+					+ "LEFT JOIN `route` ON `bus`.`route_id` = `route`.`route_id`";
 
-        	        statement = connection.prepareStatement(sql);
-        	        ResultSet resultSet = statement.executeQuery();
+			statement = connection.prepareStatement(sql);
+			ResultSet resultSet = statement.executeQuery();
 
-        	        while (resultSet.next()) {
-        	            int id = resultSet.getInt("bus_driver_id");
-        	            String firstName = resultSet.getString("first_name");
-        	            String lastName = resultSet.getString("last_name");
-        	            String gender = resultSet.getString("gender");
-        	            Date sqlDate = resultSet.getDate("date_of_birth");
-        	            LocalDate date = sqlDate.toLocalDate();
-        	            String email = resultSet.getString("email");
-        	            String phoneNumber = resultSet.getString("phone_number");
-        	            int assigned_bus = resultSet.getInt("assigned_bus");
-        	            String streetAddress = resultSet.getString("street_address");
-        	            String city = resultSet.getString("city");
-        	            String region = resultSet.getString("region");
+			while (resultSet.next()) {
+				int id = resultSet.getInt("bus_driver_id");
+				String firstName = resultSet.getString("first_name");
+				String lastName = resultSet.getString("last_name");
+				String gender = resultSet.getString("gender");
+				Date sqlDate = resultSet.getDate("date_of_birth");
+				LocalDate date = sqlDate.toLocalDate();
+				String email = resultSet.getString("email");
+				String phoneNumber = resultSet.getString("phone_number");
+				int assigned_bus = resultSet.getInt("assigned_bus");
+				String streetAddress = resultSet.getString("street_address");
+				String city = resultSet.getString("city");
+				String region = resultSet.getString("region");
 
-        	            Address address = new Address(streetAddress, city, region);
-        	            BusDriver driver = new BusDriver();
-        	            driver.setDriverId(id);
-        	            driver.setFirstName(firstName);
-        	            driver.setLastName(lastName);
-        	            driver.setGender(gender);
-        	            driver.setDateOfBirth(date);
-        	            driver.setEmail(email);
-        	            driver.setPhoneNumber(phoneNumber);
-        	            driver.setAddress(address);
+				Address address = new Address(streetAddress, city, region);
+				BusDriver driver = new BusDriver();
+				driver.setDriverId(id);
+				driver.setFirstName(firstName);
+				driver.setLastName(lastName);
+				driver.setGender(gender);
+				driver.setDateOfBirth(date);
+				driver.setEmail(email);
+				driver.setPhoneNumber(phoneNumber);
+				driver.setAddress(address);
 
-        	            if (assigned_bus != 0) {
-        	                int busId = resultSet.getInt("bus_id");
-        	                LocalDate busDate = resultSet.getDate("date").toLocalDate();
-        	                LocalTime departureTime = resultSet.getTime("departure_time").toLocalTime();
-        	                LocalTime arrivalTime = resultSet.getTime("arrival_time").toLocalTime();
-        	                double ticketPrice = resultSet.getDouble("bus_ticket_price");
-        	                int numberOfSeats = resultSet.getInt("number_of_seats");
-        	                String source = resultSet.getString("source");
-        	                String destination = resultSet.getString("destination");
-        	                
-        	                Route route = new Route(source, destination);
+				if (assigned_bus != 0) {
+					int busId = resultSet.getInt("bus_id");
+					LocalDate busDate = resultSet.getDate("date").toLocalDate();
+					LocalTime departureTime = resultSet.getTime("departure_time").toLocalTime();
+					LocalTime arrivalTime = resultSet.getTime("arrival_time").toLocalTime();
+					double ticketPrice = resultSet.getDouble("bus_ticket_price");
+					int numberOfSeats = resultSet.getInt("number_of_seats");
+					String source = resultSet.getString("source");
+					String destination = resultSet.getString("destination");
 
+					Route route = new Route(source, destination);
 
-        	                Bus bus = new Bus(driver, route, date, departureTime, arrivalTime, ticketPrice, numberOfSeats);
-        	                bus.setBusId(busId);
-        	                driver.setAssignedBus(bus);
-        	            } else {
-        	                Bus bus = null;
-        	                driver.setAssignedBus(bus);
-        	            }
-        	            
-        	            data.add(driver);
-        	        }
-        } catch(SQLException ex) {
-        	ex.printStackTrace();
-        	
-        }
-        
-        tableId.setItems(data);
-		
+					Bus bus = new Bus(driver, route, date, departureTime, arrivalTime, ticketPrice, numberOfSeats);
+					bus.setBusId(busId);
+					driver.setAssignedBus(bus);
+				} else {
+					Bus bus = null;
+					driver.setAssignedBus(bus);
+				}
+
+				data.add(driver);
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+
+		}
+
+		tableId.setItems(data);
+
 	}
 
 	/**
@@ -288,34 +273,35 @@ public class DriverController implements Initializable {
 						});
 						editButton.setOnAction((ActionEvent event) -> {
 							BusDriver data = getTableView().getItems().get(getIndex());
-							
+							System.out.println(data.getFirstName());
+							StaticCustomer.driver = data;
 							FXMLLoader loader = new FXMLLoader(getClass().getResource("editDriver.fxml"));
-							
-							  Parent root;
-							    try {
-							        root = loader.load();
-							    } catch (IOException e) {
-							        e.printStackTrace();
-							        return;
-							    }
-							    
-							EditDriverController editController = loader.getController();
-							
-						    Stage stage = new Stage();
-						    stage.setScene(new Scene(root));
-						    stage.showAndWait();
-						    
-						    
-					        BusDriver updatedDriver = editController.getUpdateDriver();
-					        
-					        updatedDriver.setAssignedBus(data.getAssignedBus());
-					        updatedDriver.getAddress().setAddressId(data.getAddress().getAddressId());
-							// call the edit method
-							admin.editDriverInfo(data, updatedDriver); 
-							
 
-							/*int selectedIndex = getTableRow().getIndex();
-							tableid.getItems().set(selectedIndex, updatedBus);*/
+							Parent root;
+							try {
+								root = loader.load();
+							} catch (IOException e) {
+								e.printStackTrace();
+								return;
+							}
+
+							EditDriverController editController = loader.getController();
+
+							Stage stage = new Stage();
+							stage.setScene(new Scene(root));
+							stage.showAndWait();
+
+							BusDriver updatedDriver = editController.getUpdateDriver();
+
+							updatedDriver.setAssignedBus(data.getAssignedBus());
+							updatedDriver.getAddress().setAddressId(data.getAddress().getAddressId());
+							// call the edit method
+							admin.editDriverInfo(data, updatedDriver);
+
+							/*
+							 * int selectedIndex = getTableRow().getIndex();
+							 * tableid.getItems().set(selectedIndex, updatedBus);
+							 */
 							refreshTable();
 						});
 					}
@@ -336,12 +322,10 @@ public class DriverController implements Initializable {
 			}
 		};
 
-		actionCol.setCellFactory(cellFactory);//cpy
-		tableId.getColumns().addAll(actionCol);//cpy
+		actionCol.setCellFactory(cellFactory);// cpy
+		tableId.getColumns().addAll(actionCol);// cpy
 
-
-
-                // initialize columns in table view
+		// initialize columns in table view
 		idid.setCellValueFactory(new PropertyValueFactory<>("driverId"));
 		streetAddressId.setCellValueFactory(
 				cellData -> new SimpleStringProperty(cellData.getValue().getAddress().getStreetAddress()));
@@ -355,9 +339,9 @@ public class DriverController implements Initializable {
 		dobID.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
 		genderId.setCellValueFactory(new PropertyValueFactory<>("gender"));
 		BusId.setCellValueFactory(cellData -> {
-		    Bus assignedBus = cellData.getValue().getAssignedBus();
-		    int busId = assignedBus != null ? assignedBus.getBusId() : 0;
-		    return new SimpleIntegerProperty(busId).asObject();
+			Bus assignedBus = cellData.getValue().getAssignedBus();
+			int busId = assignedBus != null ? assignedBus.getBusId() : 0;
+			return new SimpleIntegerProperty(busId).asObject();
 		});
 		try {
 			refreshTable();
@@ -372,18 +356,18 @@ public class DriverController implements Initializable {
 		}
 
 	}
+
 	private Stage stage;
 	private Scene scene;
 
-	
-	 @FXML	
-	   public void Toaddorreview(ActionEvent event) throws IOException {
-	    		  Parent root = FXMLLoader.load(getClass().getResource("addORview.fxml"));
-	    		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-	    		  scene = new Scene(root);
-	    		  stage.setScene(scene);
-	    		  stage.show();
-	    	
-	    }
-	
+	@FXML
+	public void Toaddorreview(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("addORview.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+
+	}
+
 }

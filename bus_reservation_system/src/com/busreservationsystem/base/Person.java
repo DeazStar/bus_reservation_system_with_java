@@ -1,6 +1,7 @@
 package com.busreservationsystem.base;
 
 import java.time.LocalDate;
+
 public class Person {
 	protected String firstName;
 	protected String lastName;
@@ -10,9 +11,8 @@ public class Person {
 	protected String phoneNumber;
 	protected Address address;
 
-
-	public Person (String firstName, String lastName, String gender, LocalDate dateOfBirth, String email,
-	String phoneNumber, Address address){
+	public Person(String firstName, String lastName, String gender, LocalDate dateOfBirth, String email,
+			String phoneNumber, Address address) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.gender = gender;
@@ -21,6 +21,7 @@ public class Person {
 		this.phoneNumber = phoneNumber;
 		this.address = address;
 	}
-	
-	public Person() {}
+
+	public Person() {
+	}
 }

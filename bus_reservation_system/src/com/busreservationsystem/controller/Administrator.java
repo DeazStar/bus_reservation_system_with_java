@@ -13,405 +13,396 @@ import java.math.*;
 
 public class Administrator {
 
-    private Bus bus; // new attribute
-    private BusDriver driver; // new attribute
+	private Bus bus; // new attribute
+	private BusDriver driver; // new attribute
 
-    public void addBus(Bus bus) {
-        this.bus = bus;
-    }
+	public void addBus(Bus bus) {
+		this.bus = bus;
+	}
 
-    public void editBus(Bus bus, Bus newBus) {
-        // need testing
-        Connection connection = null;
-        PreparedStatement busEdit = null;
-        PreparedStatement routeEdit = null;
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
+	public void editBus(Bus bus, Bus newBus) {
+		// need testing
+		Connection connection = null;
+		PreparedStatement busEdit = null;
+		PreparedStatement routeEdit = null;
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
 
-            String sql = "UPDATE bus SET date = ?, departure_time = ?,"
-                    + "arrival_time = ?, bus_ticket_price = ?, number_of_seats = ? WHERE bus_id = ?";
+			String sql = "UPDATE bus SET date = ?, departure_time = ?,"
+					+ "arrival_time = ?, bus_ticket_price = ?, number_of_seats = ? WHERE bus_id = ?";
 
-            busEdit = connection.prepareStatement(sql);
-            Date date = Date.valueOf(newBus.getDate());
-            busEdit.setDate(1, date);
-            busEdit.setTime(2, Time.valueOf(newBus.getDepartureTime()));
-            busEdit.setTime(3, Time.valueOf(newBus.getArrivalTime()));
-            BigDecimal price = BigDecimal.valueOf(newBus.getBusTicketPrice()).setScale(2, RoundingMode.HALF_UP);
-            busEdit.setBigDecimal(4, price);
-            busEdit.setInt(5, newBus.getNumberOfSeats());
-            busEdit.setInt(6, bus.getBusId());
-            
-            busEdit.executeUpdate();
-            
-            String routeIdSql = "SELECT route_id FROM bus WHERE bus_id = ?";
-            
-            PreparedStatement routeIdQuery = connection.prepareStatement(routeIdSql);
-            
-            routeIdQuery.setInt(1, bus.getBusId());
-            
-            ResultSet result = routeIdQuery.executeQuery();
-            
-            if (result.next()) {
-            	int routeId = result.getInt("route_id");
-                String routeSql = "UPDATE route SET source = ?, destination = ? WHERE route_id = ?";
-                routeEdit = connection.prepareStatement(routeSql);
-                routeEdit.setString(1, newBus.getRoute().getSource());
-                routeEdit.setString(2, newBus.getRoute().getDestination());
-                routeEdit.setInt(3, routeId);
+			busEdit = connection.prepareStatement(sql);
+			Date date = Date.valueOf(newBus.getDate());
+			busEdit.setDate(1, date);
+			busEdit.setTime(2, Time.valueOf(newBus.getDepartureTime()));
+			busEdit.setTime(3, Time.valueOf(newBus.getArrivalTime()));
+			BigDecimal price = BigDecimal.valueOf(newBus.getBusTicketPrice()).setScale(2, RoundingMode.HALF_UP);
+			busEdit.setBigDecimal(4, price);
+			busEdit.setInt(5, newBus.getNumberOfSeats());
+			busEdit.setInt(6, bus.getBusId());
 
-               System.out.println(routeEdit.executeUpdate());
-            }
+			busEdit.executeUpdate();
 
-            connection.commit();
+			String routeIdSql = "SELECT route_id FROM bus WHERE bus_id = ?";
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (busEdit != null) {
-                    busEdit.close();
-                }
-                if (routeEdit != null) {
-                    routeEdit.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+			PreparedStatement routeIdQuery = connection.prepareStatement(routeIdSql);
 
-    public void removeBus(Bus bus) {
-        // tested no furture testing required
-        Connection connection = null;
-        PreparedStatement busEdit = null;
-        PreparedStatement routeEdit = null;
-        PreparedStatement driverEdit = null;
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
+			routeIdQuery.setInt(1, bus.getBusId());
 
-            //SET FOREIGN KEY_CHECKS=0
-            Statement disableFKCheck = connection.createStatement();
-            disableFKCheck.execute("SET FOREIGN_KEY_CHECKS=0");
-            String routeIdSql = "SELECT route_id FROM bus WHERE bus_id = ?";
-            
-            PreparedStatement routeIdQuery = connection.prepareStatement(routeIdSql);
-            
-            routeIdQuery.setInt(1, bus.getBusId());
-            System.out.println(bus.getBusId());
-            
-            ResultSet result = routeIdQuery.executeQuery();
-            
-            
-            if (result.next()) {
-                int routeId = result.getInt("route_id");
-                System.out.println(routeId);
-                String routeSql = "DELETE from route WHERE route_id = ?";
-                routeEdit = connection.prepareStatement(routeSql);
-                routeEdit.setInt(1, routeId);
-                routeEdit.executeUpdate();	
-            }
-            
-            String sql = "DELETE FROM bus WHERE bus_id = ?";
-            busEdit = connection.prepareStatement(sql);
-            busEdit.setInt(1, bus.getBusId());
-            busEdit.executeUpdate();
-            
-           
-            
-            String driverSql = "UPDATE bus_driver SET assigned_bus = null "
-                    + "WHERE assigned_bus = ?";
-            driverEdit = connection.prepareStatement(driverSql);
-            driverEdit.setInt(1, bus.getBusId());
-            driverEdit.executeUpdate();
-            //SET FOREIGN_KEY_CHECKS=1;
-            Statement enableFKCheck = connection.createStatement();
-            enableFKCheck.execute("SET FOREIGN_KEY_CHECKS=1");
+			ResultSet result = routeIdQuery.executeQuery();
 
-            connection.commit();
+			if (result.next()) {
+				int routeId = result.getInt("route_id");
+				String routeSql = "UPDATE route SET source = ?, destination = ? WHERE route_id = ?";
+				routeEdit = connection.prepareStatement(routeSql);
+				routeEdit.setString(1, newBus.getRoute().getSource());
+				routeEdit.setString(2, newBus.getRoute().getDestination());
+				routeEdit.setInt(3, routeId);
 
-        } catch (SQLException e) {
-            try {
-                if (connection != null) {
-                    connection.rollback();
-                }
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (busEdit != null) {
-                    busEdit.close();
-                }
-                if (routeEdit != null) {
-                    routeEdit.close();
-                }
-                if (driverEdit != null) {
-                    driverEdit.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-public void removeDriver(BusDriver driver) {
-        // tested no furture testing required
-        Connection connection = null;
-        PreparedStatement busEdit = null;
-        PreparedStatement addressEdit = null;
-        PreparedStatement driverEdit = null;
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
+				System.out.println(routeEdit.executeUpdate());
+			}
 
-            //SET FOREIGN KEY_CHECKS=0
-            Statement disableFKCheck = connection.createStatement();
-            disableFKCheck.execute("SET FOREIGN_KEY_CHECKS=0");
-            String addressIdSql = "SELECT address_id FROM bus_driver WHERE bus_driver_id = ?";
-            
-            PreparedStatement addressIdQuery = connection.prepareStatement(addressIdSql);
-            
-            addressIdQuery.setInt(1, driver.getDriverId());
-            System.out.println(driver.getDriverId());
-            
-            ResultSet result = addressIdQuery.executeQuery();
-            
-            
-            if (result.next()) {
-                int addressId = result.getInt("address_id");
-                System.out.println(addressId);
-                String addressSql = "DELETE from address WHERE address_id = ?";
-                addressEdit = connection.prepareStatement(addressSql);
-                addressEdit.setInt(1, addressId);
-                addressEdit.executeUpdate();	
-            }
-            
-            String sql = "DELETE FROM bus_driver WHERE bus_driver_id = ?";
-            driverEdit = connection.prepareStatement(sql);
-            driverEdit.setInt(1, driver.getDriverId());
-            driverEdit.executeUpdate();
-            
-           
-            
-            String busSql = "UPDATE bus SET driver_id = null "
-                    + "WHERE driver_id = ?";
-            busEdit = connection.prepareStatement(busSql);
-            busEdit.setInt(1,driver.getDriverId());
-            busEdit.executeUpdate();
-            //SET FOREIGN_KEY_CHECKS=1;
-            Statement enableFKCheck = connection.createStatement();
-            enableFKCheck.execute("SET FOREIGN_KEY_CHECKS=1");
+			connection.commit();
 
-            connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (busEdit != null) {
+					busEdit.close();
+				}
+				if (routeEdit != null) {
+					routeEdit.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-        } catch (SQLException e) {
-            try {
-                if (connection != null) {
-                    connection.rollback();
-                }
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
-            e.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (driverEdit != null) {
-                    driverEdit.close();
-                }
-                if (addressEdit != null) {
-                    addressEdit.close();
-                }
-                if (busEdit != null) {
-                    busEdit.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	public void removeBus(Bus bus) {
+		// tested no furture testing required
+		Connection connection = null;
+		PreparedStatement busEdit = null;
+		PreparedStatement routeEdit = null;
+		PreparedStatement driverEdit = null;
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
 
-    public Bus searchBus(int busId) {
-        // implementation of searchBus method
-        // tested there may be need for testing on the edge cases
-        Connection connection = null;
-        PreparedStatement statement = null;
-        PreparedStatement routeRecover = null;
-        Bus bus = new Bus();
-        try {
-            BusDriver driver = new BusDriver();
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
+			// SET FOREIGN KEY_CHECKS=0
+			Statement disableFKCheck = connection.createStatement();
+			disableFKCheck.execute("SET FOREIGN_KEY_CHECKS=0");
+			String routeIdSql = "SELECT route_id FROM bus WHERE bus_id = ?";
 
-            connection = DriverManager.getConnection(url, username, password);
+			PreparedStatement routeIdQuery = connection.prepareStatement(routeIdSql);
 
-            String busSql = "SELECT * FROM bus " + "WHERE bus_id = ?";
+			routeIdQuery.setInt(1, bus.getBusId());
+			System.out.println(bus.getBusId());
 
-            statement = connection.prepareStatement(busSql);
-            statement.setInt(1, busId);
+			ResultSet result = routeIdQuery.executeQuery();
 
-            ResultSet resultset = statement.executeQuery();
+			if (result.next()) {
+				int routeId = result.getInt("route_id");
+				System.out.println(routeId);
+				String routeSql = "DELETE from route WHERE route_id = ?";
+				routeEdit = connection.prepareStatement(routeSql);
+				routeEdit.setInt(1, routeId);
+				routeEdit.executeUpdate();
+			}
 
-            while (resultset.next()) {
-                bus.setBusId(resultset.getInt("bus_id"));
-                int driverId = resultset.getInt("driver_id");
-                driver = this.searchAssignedBus(busId);
-                if (driver != null) {
-                    driver.setAssignedBus(bus);
-                    bus.setDriver(driver);
-                }
-                int routeId = resultset.getInt("route_id");
+			String sql = "DELETE FROM bus WHERE bus_id = ?";
+			busEdit = connection.prepareStatement(sql);
+			busEdit.setInt(1, bus.getBusId());
+			busEdit.executeUpdate();
 
-                String routeSql = "SELECT * FROM route " + "WHERE route_id = ?";
+			String driverSql = "UPDATE bus_driver SET assigned_bus = null " + "WHERE assigned_bus = ?";
+			driverEdit = connection.prepareStatement(driverSql);
+			driverEdit.setInt(1, bus.getBusId());
+			driverEdit.executeUpdate();
+			// SET FOREIGN_KEY_CHECKS=1;
+			Statement enableFKCheck = connection.createStatement();
+			enableFKCheck.execute("SET FOREIGN_KEY_CHECKS=1");
 
-                routeRecover = connection.prepareStatement(routeSql);
-                routeRecover.setInt(1, routeId);
+			connection.commit();
 
-                ResultSet routeSet = routeRecover.executeQuery();
+		} catch (SQLException e) {
+			try {
+				if (connection != null) {
+					connection.rollback();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (busEdit != null) {
+					busEdit.close();
+				}
+				if (routeEdit != null) {
+					routeEdit.close();
+				}
+				if (driverEdit != null) {
+					driverEdit.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-                while (routeSet.next()) {
-                    Route route = new Route();
-                    route.setRouteId(routeSet.getInt("route_id"));
-                    route.setSource(routeSet.getString("source"));
-                    route.setDestination(routeSet.getString("destination"));
+	public void removeDriver(BusDriver driver) {
+		// tested no furture testing required
+		Connection connection = null;
+		PreparedStatement busEdit = null;
+		PreparedStatement addressEdit = null;
+		PreparedStatement driverEdit = null;
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
 
-                    bus.setRoute(route);
-                }
+			// SET FOREIGN KEY_CHECKS=0
+			Statement disableFKCheck = connection.createStatement();
+			disableFKCheck.execute("SET FOREIGN_KEY_CHECKS=0");
+			String addressIdSql = "SELECT address_id FROM bus_driver WHERE bus_driver_id = ?";
 
-                bus.setDepartureTime(resultset.getTime("departure_time").toLocalTime());
-                bus.setArrivalTime(resultset.getTime("arrival_time").toLocalTime());
-                bus.setBusTicketPrice(resultset.getDouble("bus_ticket_price"));
-                bus.setnumberOfSeats(resultset.getInt("number_of_seats"));
+			PreparedStatement addressIdQuery = connection.prepareStatement(addressIdSql);
 
-            }
+			addressIdQuery.setInt(1, driver.getDriverId());
+			System.out.println(driver.getDriverId());
 
-        } catch (SQLException exc) {
-            exc.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (routeRecover != null) {
-                    routeRecover.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+			ResultSet result = addressIdQuery.executeQuery();
 
-        if (bus.getBusId() == 0) {
-            return null;
-        } else {
-            return bus;
-        }
-    }
+			if (result.next()) {
+				int addressId = result.getInt("address_id");
+				System.out.println(addressId);
+				String addressSql = "DELETE from address WHERE address_id = ?";
+				addressEdit = connection.prepareStatement(addressSql);
+				addressEdit.setInt(1, addressId);
+				addressEdit.executeUpdate();
+			}
 
-    public void showBus() {
-        // will be implemented after javafx cuz i don't know if system.out.println will print 
-        //something on the screen or the Terminal
-    }
+			String sql = "DELETE FROM bus_driver WHERE bus_driver_id = ?";
+			driverEdit = connection.prepareStatement(sql);
+			driverEdit.setInt(1, driver.getDriverId());
+			driverEdit.executeUpdate();
 
-    public void showSeats(Bus bus) {
-        // implementation of showSeats method
-    }
+			String busSql = "UPDATE bus SET driver_id = null " + "WHERE driver_id = ?";
+			busEdit = connection.prepareStatement(busSql);
+			busEdit.setInt(1, driver.getDriverId());
+			busEdit.executeUpdate();
+			// SET FOREIGN_KEY_CHECKS=1;
+			Statement enableFKCheck = connection.createStatement();
+			enableFKCheck.execute("SET FOREIGN_KEY_CHECKS=1");
 
-    public void addDriver(BusDriver driver) {
-        // tested no need for furthur testing
-        this.driver = driver;
-    }
+			connection.commit();
 
-    public void editDriverInfo(BusDriver driver, BusDriver newDriver) {
-         // tested no need for furthur testing
-        Connection connection = null;
-        PreparedStatement addressEdit = null;
-        PreparedStatement driverEdit = null;
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
-            
-            
-            String addressIdSql = "select address_id from bus_driver where bus_driver_id = ?";
-            PreparedStatement addressIdQuery = connection.prepareStatement(addressIdSql);
-            addressIdQuery.setInt(1,driver.getDriverId());
-            
-            ResultSet result = addressIdQuery.executeQuery();
-            if (result.next()){
-                int addressId = result.getInt("address_id");
-                
-                String sql = "UPDATE address SET street_address = ?,"
-                    + "city = ?, region = ? " + "WHERE address_id = ?";
+		} catch (SQLException e) {
+			try {
+				if (connection != null) {
+					connection.rollback();
+				}
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (driverEdit != null) {
+					driverEdit.close();
+				}
+				if (addressEdit != null) {
+					addressEdit.close();
+				}
+				if (busEdit != null) {
+					busEdit.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-                addressEdit = connection.prepareStatement(sql);
-                addressEdit.setString(1, newDriver.getAddress().getStreetAddress());
-                addressEdit.setString(2, newDriver.getAddress().getCity());
-                addressEdit.setString(3, newDriver.getAddress().getRegion());
-                addressEdit.setInt(4, addressId);
+	public Bus searchBus(int busId) {
+		// implementation of searchBus method
+		// tested there may be need for testing on the edge cases
+		Connection connection = null;
+		PreparedStatement statement = null;
+		PreparedStatement routeRecover = null;
+		Bus bus = new Bus();
+		try {
+			BusDriver driver = new BusDriver();
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
 
-                addressEdit.executeUpdate();
-                
-            }
-                String driverSql = "UPDATE bus_driver SET first_name = ?, last_name = ?, "
-                    + "date_of_birth = ?, email = ?, phone_number = ? ,gender = ? WHERE bus_driver_id = ?";
-            driverEdit = connection.prepareStatement(driverSql);
-            driverEdit.setString(1, newDriver.getFirstName());
-            driverEdit.setString(2, newDriver.getLastName());
-            Date date = java.sql.Date.valueOf(newDriver.getDateOfBirth());
-            driverEdit.setDate(3, date);
-            driverEdit.setString(4, newDriver.getEmail());
-            driverEdit.setString(5, newDriver.getPhoneNumber());
-            driverEdit.setString(6,newDriver.getGender());
-            driverEdit.setInt(7, driver.getDriverId());
-            driverEdit.executeUpdate();
+			connection = DriverManager.getConnection(url, username, password);
 
-            connection.commit();
+			String busSql = "SELECT * FROM bus " + "WHERE bus_id = ?";
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } 
-        finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (addressEdit != null) {
-                    addressEdit.close();
-                }
-                if (driverEdit != null) {
-                    driverEdit.close();
-                }
-            }   
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    
+			statement = connection.prepareStatement(busSql);
+			statement.setInt(1, busId);
+
+			ResultSet resultset = statement.executeQuery();
+
+			while (resultset.next()) {
+				bus.setBusId(resultset.getInt("bus_id"));
+				int driverId = resultset.getInt("driver_id");
+				driver = this.searchAssignedBus(busId);
+				if (driver != null) {
+					driver.setAssignedBus(bus);
+					bus.setDriver(driver);
+				}
+				int routeId = resultset.getInt("route_id");
+
+				String routeSql = "SELECT * FROM route " + "WHERE route_id = ?";
+
+				routeRecover = connection.prepareStatement(routeSql);
+				routeRecover.setInt(1, routeId);
+
+				ResultSet routeSet = routeRecover.executeQuery();
+
+				while (routeSet.next()) {
+					Route route = new Route();
+					route.setRouteId(routeSet.getInt("route_id"));
+					route.setSource(routeSet.getString("source"));
+					route.setDestination(routeSet.getString("destination"));
+
+					bus.setRoute(route);
+				}
+
+				bus.setDepartureTime(resultset.getTime("departure_time").toLocalTime());
+				bus.setArrivalTime(resultset.getTime("arrival_time").toLocalTime());
+				bus.setBusTicketPrice(resultset.getDouble("bus_ticket_price"));
+				bus.setnumberOfSeats(resultset.getInt("number_of_seats"));
+
+			}
+
+		} catch (SQLException exc) {
+			exc.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (routeRecover != null) {
+					routeRecover.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (bus.getBusId() == 0) {
+			return null;
+		} else {
+			return bus;
+		}
+	}
+
+	public void showBus() {
+		// will be implemented after javafx cuz i don't know if system.out.println will
+		// print
+		// something on the screen or the Terminal
+	}
+
+	public void showSeats(Bus bus) {
+		// implementation of showSeats method
+	}
+
+	public void addDriver(BusDriver driver) {
+		// tested no need for furthur testing
+		this.driver = driver;
+	}
+
+	public void editDriverInfo(BusDriver driver, BusDriver newDriver) {
+		// tested no need for furthur testing
+		Connection connection = null;
+		PreparedStatement addressEdit = null;
+		PreparedStatement driverEdit = null;
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
+
+			String addressIdSql = "select address_id from bus_driver where bus_driver_id = ?";
+			PreparedStatement addressIdQuery = connection.prepareStatement(addressIdSql);
+			addressIdQuery.setInt(1, driver.getDriverId());
+
+			ResultSet result = addressIdQuery.executeQuery();
+			if (result.next()) {
+				int addressId = result.getInt("address_id");
+
+				String sql = "UPDATE address SET street_address = ?," + "city = ?, region = ? "
+						+ "WHERE address_id = ?";
+
+				addressEdit = connection.prepareStatement(sql);
+				addressEdit.setString(1, newDriver.getAddress().getStreetAddress());
+				addressEdit.setString(2, newDriver.getAddress().getCity());
+				addressEdit.setString(3, newDriver.getAddress().getRegion());
+				addressEdit.setInt(4, addressId);
+
+				addressEdit.executeUpdate();
+
+			}
+			String driverSql = "UPDATE bus_driver SET first_name = ?, last_name = ?, "
+					+ "date_of_birth = ?, email = ?, phone_number = ? ,gender = ? WHERE bus_driver_id = ?";
+			driverEdit = connection.prepareStatement(driverSql);
+			driverEdit.setString(1, newDriver.getFirstName());
+			driverEdit.setString(2, newDriver.getLastName());
+			Date date = java.sql.Date.valueOf(newDriver.getDateOfBirth());
+			driverEdit.setDate(3, date);
+			driverEdit.setString(4, newDriver.getEmail());
+			driverEdit.setString(5, newDriver.getPhoneNumber());
+			driverEdit.setString(6, newDriver.getGender());
+			driverEdit.setInt(7, driver.getDriverId());
+			driverEdit.executeUpdate();
+
+			connection.commit();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (addressEdit != null) {
+					addressEdit.close();
+				}
+				if (driverEdit != null) {
+					driverEdit.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
 //            String sql = "UPDATE address SET street_address = ?,"
 //                    + "city = ?, region = ? " + "WHERE address_id = ?";
 //
@@ -422,415 +413,413 @@ public void removeDriver(BusDriver driver) {
 //            addressEdit.setInt(4, driver.getAddress().getAddressId());
 //
 //            addressEdit.executeUpdate();
-    }
-    // beign edited 
-    public void assignDriverToBus(int busId, int driverId) {
-        // tested no furture testing required
-        Connection connection = null;
-        PreparedStatement driverEdit = null;
-        PreparedStatement busEdit = null;
+	}
 
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
+	// beign edited
+	public void assignDriverToBus(int busId, int driverId) {
+		// tested no furture testing required
+		Connection connection = null;
+		PreparedStatement driverEdit = null;
+		PreparedStatement busEdit = null;
 
-            String busSql = "UPDATE bus SET driver_id = ? WHERE bus_id = ?";
-            busEdit = connection.prepareStatement(busSql);
-            busEdit.setInt(1, driverId);
-            busEdit.setInt(2, busId);
-            busEdit.executeUpdate();
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
 
-            String sql = "UPDATE bus_driver SET assigned_bus = ? WHERE bus_driver_id = ?";
-            driverEdit = connection.prepareStatement(sql);
-            driverEdit.setInt(1, busId);
-            driverEdit.setInt(2, driverId);
-            driverEdit.executeUpdate();
+			String busSql = "UPDATE bus SET driver_id = ? WHERE bus_id = ?";
+			busEdit = connection.prepareStatement(busSql);
+			busEdit.setInt(1, driverId);
+			busEdit.setInt(2, busId);
+			busEdit.executeUpdate();
 
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            try {
-                if (connection != null) {
-                    connection.rollback();
-                }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (busEdit != null) {
-                    busEdit.close();
-                }
-                if (driverEdit != null) {
-                    driverEdit.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+			String sql = "UPDATE bus_driver SET assigned_bus = ? WHERE bus_driver_id = ?";
+			driverEdit = connection.prepareStatement(sql);
+			driverEdit.setInt(1, busId);
+			driverEdit.setInt(2, driverId);
+			driverEdit.executeUpdate();
 
-    public BusDriver searchDriver(int driverId) {
-        //teseted no furthure testing required
-        Connection connection = null;
-        PreparedStatement statement = null;
-        PreparedStatement addressRecover = null;
-        PreparedStatement busRecover = null;
-        BusDriver driver = new BusDriver();
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				if (connection != null) {
+					connection.rollback();
+				}
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (busEdit != null) {
+					busEdit.close();
+				}
+				if (driverEdit != null) {
+					driverEdit.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
+	public BusDriver searchDriver(int driverId) {
+		// teseted no furthure testing required
+		Connection connection = null;
+		PreparedStatement statement = null;
+		PreparedStatement addressRecover = null;
+		PreparedStatement busRecover = null;
+		BusDriver driver = new BusDriver();
 
-            connection = DriverManager.getConnection(url, username, password);
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
 
-            connection.setAutoCommit(false);
+			connection = DriverManager.getConnection(url, username, password);
 
-            String sql = "SELECT * from bus_driver " + "WHERE bus_driver_id = ?";
+			connection.setAutoCommit(false);
 
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1, driverId);
+			String sql = "SELECT * from bus_driver " + "WHERE bus_driver_id = ?";
 
-            ResultSet resultset = statement.executeQuery();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, driverId);
 
-            while (resultset.next()) {
-                driver.setDriverId(resultset.getInt("bus_driver_id"));
-                driver.setFirstName(resultset.getString("first_name"));
-                driver.setLastName(resultset.getString("last_name"));
-                driver.setDateOfBirth(resultset.getDate("date_of_birth").toLocalDate());
-                driver.setEmail(resultset.getString("email"));
-                driver.setPhoneNumber(resultset.getString("phone_number"));
+			ResultSet resultset = statement.executeQuery();
 
-                int addressId = resultset.getInt("address_id");
+			while (resultset.next()) {
+				driver.setDriverId(resultset.getInt("bus_driver_id"));
+				driver.setFirstName(resultset.getString("first_name"));
+				driver.setLastName(resultset.getString("last_name"));
+				driver.setDateOfBirth(resultset.getDate("date_of_birth").toLocalDate());
+				driver.setEmail(resultset.getString("email"));
+				driver.setPhoneNumber(resultset.getString("phone_number"));
 
-                Address address = new Address();
+				int addressId = resultset.getInt("address_id");
 
-                String addressSql = "SELECT * FROM address " + "WHERE address_id = ? ";
+				Address address = new Address();
 
-                addressRecover = connection.prepareStatement(addressSql);
-                addressRecover.setInt(1, addressId);
+				String addressSql = "SELECT * FROM address " + "WHERE address_id = ? ";
 
-                ResultSet addressSet = addressRecover.executeQuery();
+				addressRecover = connection.prepareStatement(addressSql);
+				addressRecover.setInt(1, addressId);
 
-                while (addressSet.next()) {
-                    address.setAddressId(addressSet.getInt("address_id"));
-                    address.setStreetAddress(addressSet.getString("street_address"));
-                    address.setCity(addressSet.getString("city"));
-                    address.setRegion(addressSet.getString("region"));
-                }
+				ResultSet addressSet = addressRecover.executeQuery();
 
-                driver.setAddress(address);
-                int busId = resultset.getInt("assigned_bus");
+				while (addressSet.next()) {
+					address.setAddressId(addressSet.getInt("address_id"));
+					address.setStreetAddress(addressSet.getString("street_address"));
+					address.setCity(addressSet.getString("city"));
+					address.setRegion(addressSet.getString("region"));
+				}
 
-                if (busId == 0) {
-                    driver.setAssignedBus(null);
-                } else {
-                    String busSql = "SELECT * FROM bus WHERE bus_id = ?";
-                    busRecover = connection.prepareStatement(busSql);
-                    busRecover.setInt(1, busId);
+				driver.setAddress(address);
+				int busId = resultset.getInt("assigned_bus");
 
-                    ResultSet busSet = busRecover.executeQuery();
+				if (busId == 0) {
+					driver.setAssignedBus(null);
+				} else {
+					String busSql = "SELECT * FROM bus WHERE bus_id = ?";
+					busRecover = connection.prepareStatement(busSql);
+					busRecover.setInt(1, busId);
 
-                    while (busSet.next()) {
-                        Bus bus = new Bus();
+					ResultSet busSet = busRecover.executeQuery();
 
-                        bus.setBusId(busSet.getInt("bus_id"));
-                        int driver_id = busSet.getInt("driver_id");
-                        int routeId = busSet.getInt("route_id");
+					while (busSet.next()) {
+						Bus bus = new Bus();
 
-                        String routeSql = "SELECT * FROM route WHERE route_id = ?";
-                        PreparedStatement routeStmt = connection.prepareStatement(routeSql);
-                        routeStmt.setInt(1, routeId);
+						bus.setBusId(busSet.getInt("bus_id"));
+						int driver_id = busSet.getInt("driver_id");
+						int routeId = busSet.getInt("route_id");
 
-                        ResultSet routeSet = routeStmt.executeQuery();
+						String routeSql = "SELECT * FROM route WHERE route_id = ?";
+						PreparedStatement routeStmt = connection.prepareStatement(routeSql);
+						routeStmt.setInt(1, routeId);
 
-                        while (routeSet.next()) {
-                            Route route = new Route();
-                            route.setRouteId(routeSet.getInt("route_id"));
-                            route.setSource(routeSet.getString("source"));
-                            route.setDestination(routeSet.getString("destination"));
+						ResultSet routeSet = routeStmt.executeQuery();
 
-                            bus.setRoute(route);
-                        }
+						while (routeSet.next()) {
+							Route route = new Route();
+							route.setRouteId(routeSet.getInt("route_id"));
+							route.setSource(routeSet.getString("source"));
+							route.setDestination(routeSet.getString("destination"));
 
-                        bus.setDepartureTime(busSet.getTime("departure_time").toLocalTime());
-                        bus.setArrivalTime(busSet.getTime("arrival_time").toLocalTime());
-                        bus.setBusTicketPrice(busSet.getDouble("bus_ticket_price"));
-                        bus.setnumberOfSeats(busSet.getInt("number_of_seats"));
-                    }
-                    driver.setAssignedBus(bus);
-                }
+							bus.setRoute(route);
+						}
 
-                connection.commit();
+						bus.setDepartureTime(busSet.getTime("departure_time").toLocalTime());
+						bus.setArrivalTime(busSet.getTime("arrival_time").toLocalTime());
+						bus.setBusTicketPrice(busSet.getDouble("bus_ticket_price"));
+						bus.setnumberOfSeats(busSet.getInt("number_of_seats"));
+					}
+					driver.setAssignedBus(bus);
+				}
 
-            }
-        } catch (SQLException exc) {
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-            exc.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (addressRecover != null) {
-                    addressRecover.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+				connection.commit();
 
-        if (driver.getDriverId() == 0) {
-            return null;
-        } else {
-            return driver;
-        }
+			}
+		} catch (SQLException exc) {
+			try {
+				connection.rollback();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			exc.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (addressRecover != null) {
+					addressRecover.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
-    }
+		if (driver.getDriverId() == 0) {
+			return null;
+		} else {
+			return driver;
+		}
 
-    public BusDriver searchAssignedBus(int assignedBusId) {
-        // tested no furture testing required
-        Connection connection = null;
-        PreparedStatement statement = null;
-        PreparedStatement addressRecover = null;
-        /* PreparedStatement busRecover = null; */
-        BusDriver driver = new BusDriver();
+	}
 
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
+	public BusDriver searchAssignedBus(int assignedBusId) {
+		// tested no furture testing required
+		Connection connection = null;
+		PreparedStatement statement = null;
+		PreparedStatement addressRecover = null;
+		/* PreparedStatement busRecover = null; */
+		BusDriver driver = new BusDriver();
 
-            connection = DriverManager.getConnection(url, username, password);
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
 
-            String sql = "SELECT * from bus_driver " + "WHERE assigned_bus = ?";
+			connection = DriverManager.getConnection(url, username, password);
 
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1, assignedBusId);
+			String sql = "SELECT * from bus_driver " + "WHERE assigned_bus = ?";
 
-            ResultSet resultset = statement.executeQuery();
+			statement = connection.prepareStatement(sql);
+			statement.setInt(1, assignedBusId);
 
-            while (resultset.next()) {
-                driver.setDriverId(resultset.getInt("bus_driver_id"));
-                driver.setFirstName(resultset.getString("first_name"));
-                driver.setLastName(resultset.getString("last_name"));
-                driver.setDateOfBirth(resultset.getDate("date_of_birth").toLocalDate());
-                driver.setEmail(resultset.getString("email"));
-                driver.setPhoneNumber(resultset.getString("phone_number"));
+			ResultSet resultset = statement.executeQuery();
 
-                int addressId = resultset.getInt("address_id");
+			while (resultset.next()) {
+				driver.setDriverId(resultset.getInt("bus_driver_id"));
+				driver.setFirstName(resultset.getString("first_name"));
+				driver.setLastName(resultset.getString("last_name"));
+				driver.setDateOfBirth(resultset.getDate("date_of_birth").toLocalDate());
+				driver.setEmail(resultset.getString("email"));
+				driver.setPhoneNumber(resultset.getString("phone_number"));
 
-                Address address = new Address();
+				int addressId = resultset.getInt("address_id");
 
-                String addressSql = "SELECT * FROM address " + "WHERE address_id = ? ";
+				Address address = new Address();
 
-                addressRecover = connection.prepareStatement(addressSql);
-                addressRecover.setInt(1, addressId);
+				String addressSql = "SELECT * FROM address " + "WHERE address_id = ? ";
 
-                ResultSet addressSet = addressRecover.executeQuery();
+				addressRecover = connection.prepareStatement(addressSql);
+				addressRecover.setInt(1, addressId);
 
-                while (addressSet.next()) {
-                    address.setAddressId(addressSet.getInt("address_id"));
-                    address.setStreetAddress(addressSet.getString("street_address"));
-                    address.setCity(addressSet.getString("city"));
-                    address.setRegion(addressSet.getString("region"));
-                }
+				ResultSet addressSet = addressRecover.executeQuery();
 
-                driver.setAddress(address);
-                driver.setAssignedBus(null);
+				while (addressSet.next()) {
+					address.setAddressId(addressSet.getInt("address_id"));
+					address.setStreetAddress(addressSet.getString("street_address"));
+					address.setCity(addressSet.getString("city"));
+					address.setRegion(addressSet.getString("region"));
+				}
 
-            }
-        } catch (SQLException exc) {
-            exc.printStackTrace();
-        } finally {
-            try {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (addressRecover != null) {
-                    addressRecover.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+				driver.setAddress(address);
+				driver.setAssignedBus(null);
 
-        if (driver.getDriverId() == 0) {
-            return null;
-        } else {
-            return driver;
-        }
-    }
+			}
+		} catch (SQLException exc) {
+			exc.printStackTrace();
+		} finally {
+			try {
+				if (connection != null) {
+					connection.close();
+				}
+				if (statement != null) {
+					statement.close();
+				}
+				if (addressRecover != null) {
+					addressRecover.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 
-    public int store() {
-        // testd no need for furture testing
-        Connection connection = null;
-        PreparedStatement busInsert = null;
-        PreparedStatement routeInsert = null;
-        int busId = 0;
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
-            // connect to the database
-            connection = DriverManager.getConnection(url, username, password);
+		if (driver.getDriverId() == 0) {
+			return null;
+		} else {
+			return driver;
+		}
+	}
 
-            // Start the transaction
-            connection.setAutoCommit(false);
+	public int store() {
+		// testd no need for furture testing
+		Connection connection = null;
+		PreparedStatement busInsert = null;
+		PreparedStatement routeInsert = null;
+		int busId = 0;
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
+			// connect to the database
+			connection = DriverManager.getConnection(url, username, password);
 
-            // create a preparestatement for route info and bus info
-            routeInsert = connection.prepareStatement("INSERT INTO route (source, destination)" + " VALUES(?, ?)",
-                    Statement.RETURN_GENERATED_KEYS);
+			// Start the transaction
+			connection.setAutoCommit(false);
 
-            busInsert = connection.prepareStatement("INSERT INTO bus (driver_id, route_id, "
-                    + "date, departure_time, arrival_time, bus_ticket_price, number_of_seats) " + "VALUES(?, ?, ?, ?, ?, ?, ?)",
-                    Statement.RETURN_GENERATED_KEYS);
+			// create a preparestatement for route info and bus info
+			routeInsert = connection.prepareStatement("INSERT INTO route (source, destination)" + " VALUES(?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
 
-            // insert data into route table
-            routeInsert.setString(1, bus.getRoute().getSource());
-            routeInsert.setString(2, bus.getRoute().getDestination());
-            routeInsert.executeUpdate();
+			busInsert = connection.prepareStatement("INSERT INTO bus (driver_id, route_id, "
+					+ "date, departure_time, arrival_time, bus_ticket_price, number_of_seats) "
+					+ "VALUES(?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
-            ResultSet routeKey = routeInsert.getGeneratedKeys();
-            routeKey.next();
-            int route_id = routeKey.getInt(1);
+			// insert data into route table
+			routeInsert.setString(1, bus.getRoute().getSource());
+			routeInsert.setString(2, bus.getRoute().getDestination());
+			routeInsert.executeUpdate();
 
-            // insert data into bus table
-            busInsert.setObject(1, null, Types.INTEGER);
-            busInsert.setInt(2, route_id);
-            Date date = Date.valueOf(bus.getDate());
-            Time departureTime = Time.valueOf(bus.getDepartureTime());
-            Time arrivalTime = Time.valueOf(bus.getArrivalTime());
-            busInsert.setDate(3, date);
-            busInsert.setTime(4, departureTime);
-            busInsert.setTime(5, arrivalTime);
-            BigDecimal price = BigDecimal.valueOf(bus.getBusTicketPrice()).setScale(2, RoundingMode.HALF_UP);
-            busInsert.setBigDecimal(6, price);
-            busInsert.setInt(7, bus.getNumberOfSeats());
-            busInsert.executeUpdate();
+			ResultSet routeKey = routeInsert.getGeneratedKeys();
+			routeKey.next();
+			int route_id = routeKey.getInt(1);
 
-            ResultSet busKey = busInsert.getGeneratedKeys();
-            busKey.next();
-            busId = busKey.getInt(1);
-            bus.setBusId(busId);
-            // commit the transaction
+			// insert data into bus table
+			busInsert.setObject(1, null, Types.INTEGER);
+			busInsert.setInt(2, route_id);
+			Date date = Date.valueOf(bus.getDate());
+			Time departureTime = Time.valueOf(bus.getDepartureTime());
+			Time arrivalTime = Time.valueOf(bus.getArrivalTime());
+			busInsert.setDate(3, date);
+			busInsert.setTime(4, departureTime);
+			busInsert.setTime(5, arrivalTime);
+			BigDecimal price = BigDecimal.valueOf(bus.getBusTicketPrice()).setScale(2, RoundingMode.HALF_UP);
+			busInsert.setBigDecimal(6, price);
+			busInsert.setInt(7, bus.getNumberOfSeats());
+			busInsert.executeUpdate();
 
-            connection.commit();
+			ResultSet busKey = busInsert.getGeneratedKeys();
+			busKey.next();
+			busId = busKey.getInt(1);
+			bus.setBusId(busId);
+			// commit the transaction
 
-        } catch (SQLException exce) {
-            exce.printStackTrace();
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        } finally {
-            try {
-                busInsert.close();
-                routeInsert.close();
-                /*
+			connection.commit();
+
+		} catch (SQLException exce) {
+			exce.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+		} finally {
+			try {
+				busInsert.close();
+				routeInsert.close();
+				/*
 				 * driverInsert.close(); addressInsert.close();
-                 */
-                connection.close();
-            } catch (SQLException exc) {
-                exc.printStackTrace();
-            }
-        }
-        
-        
-        return busId;
-    }
+				 */
+				connection.close();
+			} catch (SQLException exc) {
+				exc.printStackTrace();
+			}
+		}
 
-    public void saveDriver() {
-        // tested no need for furthur testing
-        Connection connection = null;
-        PreparedStatement addressInsert = null;
-        PreparedStatement driverInsert = null;
+		return busId;
+	}
 
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String username = "customer";
-            String password = "Customer123$";
+	public void saveDriver() {
+		// tested no need for furthur testing
+		Connection connection = null;
+		PreparedStatement addressInsert = null;
+		PreparedStatement driverInsert = null;
 
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false);
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String username = "customer";
+			String password = "Customer123$";
 
-            // create a prepared statement for driver and address
-            addressInsert = connection.prepareStatement(
-                    "INSERT INTO address (" + "street_address, city, region) VALUES (?, ?, ?)",
-                    Statement.RETURN_GENERATED_KEYS);
+			connection = DriverManager.getConnection(url, username, password);
+			connection.setAutoCommit(false);
 
-            driverInsert = connection.prepareStatement(
-                    "INSERT INTO bus_driver (first_name, last_name, "
-                    + "gender, date_of_birth, email, phone_number, address_id, "
-                    + "assigned_bus) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                    Statement.RETURN_GENERATED_KEYS);
+			// create a prepared statement for driver and address
+			addressInsert = connection.prepareStatement(
+					"INSERT INTO address (" + "street_address, city, region) VALUES (?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
 
-            // insert the address info
-            addressInsert.setString(1, driver.getAddress().getStreetAddress());
-            addressInsert.setString(2, driver.getAddress().getCity());
-            addressInsert.setString(3, driver.getAddress().getRegion());
-            addressInsert.executeUpdate();
+			driverInsert = connection.prepareStatement("INSERT INTO bus_driver (first_name, last_name, "
+					+ "gender, date_of_birth, email, phone_number, address_id, "
+					+ "assigned_bus) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
-            // get the generated address_id
-            ResultSet addressKey = addressInsert.getGeneratedKeys();
-            if (addressKey.next()) {
-                int address_id = addressKey.getInt(1);
+			// insert the address info
+			addressInsert.setString(1, driver.getAddress().getStreetAddress());
+			addressInsert.setString(2, driver.getAddress().getCity());
+			addressInsert.setString(3, driver.getAddress().getRegion());
+			addressInsert.executeUpdate();
 
-                // insert the driver info
-                driverInsert.setString(1, driver.getFirstName());
-                driverInsert.setString(2, driver.getLastName());
-                driverInsert.setString(3, driver.getGender());
-                Date date = java.sql.Date.valueOf(driver.getDateOfBirth());
-                driverInsert.setDate(4, date);
-                driverInsert.setString(5, driver.getEmail());
-                driverInsert.setString(6, driver.getPhoneNumber());
-                driverInsert.setInt(7, address_id);
-                driverInsert.setObject(8, null, Types.INTEGER);
-                driverInsert.executeUpdate();
+			// get the generated address_id
+			ResultSet addressKey = addressInsert.getGeneratedKeys();
+			if (addressKey.next()) {
+				int address_id = addressKey.getInt(1);
 
-                ResultSet driverKey = driverInsert.getGeneratedKeys();
-                driverKey.next();
+				// insert the driver info
+				driverInsert.setString(1, driver.getFirstName());
+				driverInsert.setString(2, driver.getLastName());
+				driverInsert.setString(3, driver.getGender());
+				Date date = java.sql.Date.valueOf(driver.getDateOfBirth());
+				driverInsert.setDate(4, date);
+				driverInsert.setString(5, driver.getEmail());
+				driverInsert.setString(6, driver.getPhoneNumber());
+				driverInsert.setInt(7, address_id);
+				driverInsert.setObject(8, null, Types.INTEGER);
+				driverInsert.executeUpdate();
 
-                driver.setDriverId(driverKey.getInt(1));
+				ResultSet driverKey = driverInsert.getGeneratedKeys();
+				driverKey.next();
 
-                connection.commit();
+				driver.setDriverId(driverKey.getInt(1));
 
-            }
+				connection.commit();
 
-        } catch (SQLException exce) {
-            exce.printStackTrace();
-            try {
-                connection.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            } finally {
-                try {
-                    addressInsert.close();
-                    driverInsert.close();
-                    connection.close();
-                } catch (SQLException exc) {
-                    exc.printStackTrace();
-                }
-            }
-        }
+			}
 
-    }
+		} catch (SQLException exce) {
+			exce.printStackTrace();
+			try {
+				connection.rollback();
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			} finally {
+				try {
+					addressInsert.close();
+					driverInsert.close();
+					connection.close();
+				} catch (SQLException exc) {
+					exc.printStackTrace();
+				}
+			}
+		}
+
+	}
 }

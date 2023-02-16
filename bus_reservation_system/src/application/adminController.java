@@ -50,6 +50,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.sql.*;
 import application.EditBusController;
+
 public class adminController implements Initializable {
 
 	private Stage stage;
@@ -78,9 +79,9 @@ public class adminController implements Initializable {
 
 	@FXML
 	private TableColumn<Bus, Double> priceid;
-	
-    @FXML
-    private ComboBox<Integer> assignDriver;
+
+	@FXML
+	private ComboBox<Integer> assignDriver;
 
 	@FXML
 	private TableColumn<Bus, LocalDate> datetableId;
@@ -115,16 +116,15 @@ public class adminController implements Initializable {
 
 	@FXML
 	private void add() {
-		
-		if (source_TextField.getText().isBlank() == true || source_TextField.getText().isBlank() == true || price_TextField.getText().isBlank() == true)
-		{
+
+		if (source_TextField.getText().isBlank() == true || source_TextField.getText().isBlank() == true
+				|| price_TextField.getText().isBlank() == true) {
 			Alert alert = new Alert(AlertType.ERROR);
-		    alert.setContentText("Please Enter Full Bus Information");
+			alert.setContentText("Please Enter Full Bus Information");
 			alert.showAndWait();
 			return;
 		}
-		
-		
+
 		Bus bus = new Bus();
 		Route route = new Route();
 
@@ -136,39 +136,35 @@ public class adminController implements Initializable {
 		bus.setDriver(null);
 		bus.setRoute(route);
 		bus.setDate(dateId.getValue());
-				
-		try 
-		{
-			  validateTime(deptime_TextField.getText());
-			  
-			  bus.setDepartureTime(LocalTime.parse(deptime_TextField.getText(), DateTimeFormatter.ofPattern("HH:mm:ss")));
-			  
-			  validateTime(arrivaltime_TextField.getText());
-			  
-				bus.setArrivalTime(LocalTime.parse(arrivaltime_TextField.getText(), DateTimeFormatter.ofPattern("HH:mm:ss")));
 
-			} 
-		catch (InvalidTimeFormatException e) 
-			{
-				System.out.println("Error: " + e.getMessage());
-			}
+		try {
+			validateTime(deptime_TextField.getText());
+
+			bus.setDepartureTime(LocalTime.parse(deptime_TextField.getText(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+
+			validateTime(arrivaltime_TextField.getText());
+
+			bus.setArrivalTime(
+					LocalTime.parse(arrivaltime_TextField.getText(), DateTimeFormatter.ofPattern("HH:mm:ss")));
+
+		} catch (InvalidTimeFormatException e) {
+			System.out.println("Error: " + e.getMessage());
+		}
 
 		bus.setBusTicketPrice(Double.parseDouble(price_TextField.getText()));
 		bus.setnumberOfSeats(Integer.parseInt(totald_TextField.getText()));
-		
+
 		Administrator admin = new Administrator();
 
 		admin.addBus(bus);
 		int busId = admin.store();
-		
-		
+
 		System.out.println(busId);
 		int driverId = assignDriver.getSelectionModel().getSelectedItem();
-		
+
 		System.out.println(busId);
-		
+
 		admin.assignDriverToBus(busId, driverId);
-		
 
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setContentText("Bus added Succesfuly");
@@ -178,13 +174,13 @@ public class adminController implements Initializable {
 
 	}
 
-	 void validateTime(String time) throws InvalidTimeFormatException {
-		  // Check if the input time is in the correct format
-		  if (!time.matches("\\d{2}:\\d{2}:\\d{2}")) {
-		    throw new InvalidTimeFormatException();
-		  }
+	void validateTime(String time) throws InvalidTimeFormatException {
+		// Check if the input time is in the correct format
+		if (!time.matches("\\d{2}:\\d{2}:\\d{2}")) {
+			throw new InvalidTimeFormatException();
 		}
-	 
+	}
+
 	@FXML
 	private void refreshTable() {
 		// create an observablelist to store data
@@ -238,32 +234,31 @@ public class adminController implements Initializable {
 
 		tableid.setItems(data);
 	}
-	
-	
-    public void connect() {
-        ObservableList<Bus> data = FXCollections.observableArrayList();
-		
-        Connection connection = null;
-        PreparedStatement statement = null;
-        
-        try {
-            String url = "jdbc:mysql://localhost:3306/busreservation_db";
-            String databaseUsername = "customer";
-            String password = "Customer123$";
-            connection = DriverManager.getConnection(url, databaseUsername, password);
-           
-            statement = connection.prepareStatement("select bus_driver_id from bus_driver");
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                
-            	assignDriver.getItems().add(resultSet.getInt("bus_driver_id"));
-        }
 
-    }
-    catch (SQLException e) {
-      e.printStackTrace();
-    }
-  }
+	public void connect() {
+		ObservableList<Bus> data = FXCollections.observableArrayList();
+
+		Connection connection = null;
+		PreparedStatement statement = null;
+
+		try {
+			String url = "jdbc:mysql://localhost:3306/busreservation_db";
+			String databaseUsername = "customer";
+			String password = "Customer123$";
+			connection = DriverManager.getConnection(url, databaseUsername, password);
+
+			statement = connection.prepareStatement("select bus_driver_id from bus_driver");
+			ResultSet resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+
+				assignDriver.getItems().add(resultSet.getInt("bus_driver_id"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		connect();
@@ -287,34 +282,34 @@ public class adminController implements Initializable {
 						});
 						editButton.setOnAction((ActionEvent event) -> {
 							Bus data = getTableView().getItems().get(getIndex());
-							
-							FXMLLoader loader = new FXMLLoader(getClass().getResource("editBus.fxml"));
-							
-							  Parent root;
-							    try {
-							        root = loader.load();
-							    } catch (IOException e) {
-							        e.printStackTrace();
-							        return;
-							    }
-							    
-							EditBusController editController = loader.getController();
-							
-						    Stage stage = new Stage();
-						    stage.setScene(new Scene(root));
-						    stage.showAndWait();
-						    
-						    
-					        Bus updatedBus = editController.geteUpdateBus();
-					        
-					        updatedBus.setDriver(data.getDrivere());
-					        updatedBus.getRoute().setRouteId(data.getRoute().getRouteId());
-							// call the edit method
-							admin.editBus(data, updatedBus); 
-							
 
-							/*int selectedIndex = getTableRow().getIndex();
-							tableid.getItems().set(selectedIndex, updatedBus);*/
+							FXMLLoader loader = new FXMLLoader(getClass().getResource("editBus.fxml"));
+
+							Parent root;
+							try {
+								root = loader.load();
+							} catch (IOException e) {
+								e.printStackTrace();
+								return;
+							}
+
+							EditBusController editController = loader.getController();
+
+							Stage stage = new Stage();
+							stage.setScene(new Scene(root));
+							stage.showAndWait();
+
+							Bus updatedBus = editController.geteUpdateBus();
+
+							updatedBus.setDriver(data.getDrivere());
+							updatedBus.getRoute().setRouteId(data.getRoute().getRouteId());
+							// call the edit method
+							admin.editBus(data, updatedBus);
+
+							/*
+							 * int selectedIndex = getTableRow().getIndex();
+							 * tableid.getItems().set(selectedIndex, updatedBus);
+							 */
 							refreshTable();
 						});
 					}
@@ -340,8 +335,8 @@ public class adminController implements Initializable {
 		// initialize columns in table view
 		busnoid.setCellValueFactory(new PropertyValueFactory<>("busId"));
 		driverid.setCellValueFactory(cellData -> {
-		    int driverId = cellData.getValue().getDrivere().getDriverId();
-		    return new SimpleIntegerProperty(driverId).asObject();
+			int driverId = cellData.getValue().getDrivere().getDriverId();
+			return new SimpleIntegerProperty(driverId).asObject();
 		});
 		sourceid.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getRoute().getSource()));
 		destinationid.setCellValueFactory(
@@ -366,7 +361,7 @@ public class adminController implements Initializable {
 					"The table could not be loaded due to a null pointer exception. Please check the code for any errors and try again.");
 			alert.showAndWait();
 		}
-		
+
 	}
 
 	@FXML
@@ -377,7 +372,7 @@ public class adminController implements Initializable {
 		stage.setScene(scene);
 		stage.show();
 	}
-	
+
 	@FXML
 	public void toadmin(ActionEvent event) throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("admin.fxml"));
@@ -386,24 +381,23 @@ public class adminController implements Initializable {
 		stage.setScene(scene);
 		stage.show();
 	}
-	
+
 	@FXML
-	 public void ToaddORview(ActionEvent event) throws IOException {
-		  Parent root = FXMLLoader.load(getClass().getResource("addORview.fxml"));
-		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		  scene = new Scene(root);
-		  stage.setScene(scene);
-		  stage.show();
+	public void ToaddORview(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("addORview.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 
-
 	@FXML
-	 public void ToWelcome(ActionEvent event) throws IOException {
-		  Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
-		  stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		  scene = new Scene(root);
-		  stage.setScene(scene);
-		  stage.show();
+	public void ToWelcome(ActionEvent event) throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("welcome.fxml"));
+		stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 }
